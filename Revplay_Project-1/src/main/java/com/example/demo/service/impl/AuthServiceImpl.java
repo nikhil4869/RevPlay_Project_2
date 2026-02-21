@@ -55,7 +55,8 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("User must be at least 13 years old");
         }
 
-        Role role = roleRepository.findByName(request.getRole())
+        Role role = roleRepository
+                .findByNameIgnoreCase(request.getRole())
                 .orElseThrow(() -> new BadRequestException("Invalid role"));
 
         User user = new User();
