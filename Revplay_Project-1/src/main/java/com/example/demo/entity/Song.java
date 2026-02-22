@@ -1,37 +1,29 @@
 package com.example.demo.entity;
 
-<<<<<<< HEAD
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
-@Entity
-=======
-import jakarta.persistence.*;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "SONG")
->>>>>>> origin/harish-dev
 public class Song {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-<<<<<<< HEAD
-    private String title;
-
-    private Integer duration;
-
-    public Song() {
-    }
-
-    public Song(String title, Integer duration) {
-        this.title = title;
-        this.duration = duration;
-    }
-=======
     @Column(nullable = false)
     private String title;
 
@@ -44,34 +36,50 @@ public class Song {
 
     private String coverImage;  // optional album art
 
+    @Column(nullable = false)
     private boolean isPublic = true;
+
+    //  NEW FIELD - track popularity
+    @Column(nullable = false)
+    private Long playCount = 0L;
+
+    // Analytics ready fields
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     // song belongs to an artist
     @ManyToOne
     @JoinColumn(name = "artist_id", nullable = false)
     private User artist;
-    
+
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
 
     private Integer trackNumber;
 
-
     public Song() {}
->>>>>>> origin/harish-dev
+
+    // Automatically set timestamps
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    // ===== Getters & Setters =====
 
     public Long getId() {
         return id;
     }
 
-<<<<<<< HEAD
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-=======
->>>>>>> origin/harish-dev
     public String getTitle() {
         return title;
     }
@@ -80,16 +88,6 @@ public class Song {
         this.title = title;
     }
 
-<<<<<<< HEAD
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
-}
-=======
     public String getGenre() {
         return genre;
     }
@@ -130,6 +128,22 @@ public class Song {
         isPublic = aPublic;
     }
 
+    public Long getPlayCount() {
+        return playCount;
+    }
+
+    public void setPlayCount(Long playCount) {
+        this.playCount = playCount;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
     public User getArtist() {
         return artist;
     }
@@ -137,7 +151,7 @@ public class Song {
     public void setArtist(User artist) {
         this.artist = artist;
     }
-    
+
     public Album getAlbum() {
         return album;
     }
@@ -145,7 +159,7 @@ public class Song {
     public void setAlbum(Album album) {
         this.album = album;
     }
-    
+
     public Integer getTrackNumber() {
         return trackNumber;
     }
@@ -153,7 +167,4 @@ public class Song {
     public void setTrackNumber(Integer trackNumber) {
         this.trackNumber = trackNumber;
     }
-
-
 }
->>>>>>> origin/harish-dev

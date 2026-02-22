@@ -1,30 +1,5 @@
 package com.example.demo.controller;
 
-<<<<<<< HEAD
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.dto.music.SongDTO;
-import com.example.demo.service.SongService;
-
-@RestController
-@RequestMapping("/api")
-public class SongController {
-	
-	 @Autowired
-	 private SongService songService;
-	 
-	  @GetMapping("/songs")
-	    public List<SongDTO> getAllSongs() {
-	        return songService.getAllSongs();
-	    }
-
-}
-=======
 import com.example.demo.service.SongService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,8 +36,8 @@ public class SongController {
     public ResponseEntity<List<SongDTO>> getMySongs() {
         return ResponseEntity.ok(songService.getMySongs());
     }
-    
-    //Song cover
+
+    // Song cover
     @PostMapping("/{id}/cover")
     public ResponseEntity<SongDTO> uploadCover(
             @PathVariable Long id,
@@ -70,8 +45,8 @@ public class SongController {
 
         return ResponseEntity.ok(songService.uploadCover(id, image));
     }
-    
-    //add songs to album
+
+    // add songs to album
     @PutMapping("/{songId}/album/{albumId}")
     public String addSongToAlbum(@PathVariable Long songId,
                                  @PathVariable Long albumId,
@@ -80,21 +55,21 @@ public class SongController {
         songService.addSongToAlbum(songId, albumId, trackNumber);
         return "Song added to album";
     }
-    
-    //Get album by Id
+
+    // Get album by Id
     @GetMapping("/album/{albumId}")
     public List<SongDTO> getAlbumSongs(@PathVariable Long albumId) {
         return songService.getAlbumSongs(albumId);
     }
 
-    //removing song from album not deleting song
+    // removing song from album not deleting song
     @PutMapping("/{songId}/remove-album")
     public String removeFromAlbum(@PathVariable Long songId) {
         songService.removeFromAlbum(songId);
         return "Song removed from album";
     }
 
-    //re-ordering track numbers in album
+    // re-ordering track numbers in album
     @PutMapping("/{songId}/reorder")
     public String reorderTrack(@PathVariable Long songId,
                                @RequestParam Integer newTrackNumber) {
@@ -102,13 +77,10 @@ public class SongController {
         songService.reorderTrack(songId, newTrackNumber);
         return "Track reordered successfully";
     }
-    
+
     @DeleteMapping("/{songId}")
     public String deleteSong(@PathVariable Long songId) {
         songService.deleteSong(songId);
         return "Song deleted permanently";
     }
-
-
 }
->>>>>>> origin/harish-dev

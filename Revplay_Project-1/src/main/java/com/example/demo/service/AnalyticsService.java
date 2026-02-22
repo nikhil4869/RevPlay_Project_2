@@ -1,5 +1,18 @@
 package com.example.demo.service;
 
-public interface AnalyticsService {
+import java.util.Map;
 
+import com.example.demo.dto.analytics.UserAnalyticsDTO;
+
+import java.util.List;
+
+public interface AnalyticsService {
+	
+	 UserAnalyticsDTO getMyAnalytics();
+
+    Map<String, Object> getListenerSummary();
+
+    List<?> getTopSongs(int limit);
+
+    List<?> getTopGenres();
 }
