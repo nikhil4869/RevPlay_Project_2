@@ -10,4 +10,9 @@ public class RoleTestController {
     public String artistOnly() {
         return "Artist content accessed";
     }
+    
+    @GetMapping("/user-only")
+    public String userOnly() {
+        return "User content accessed";
+    }
 }

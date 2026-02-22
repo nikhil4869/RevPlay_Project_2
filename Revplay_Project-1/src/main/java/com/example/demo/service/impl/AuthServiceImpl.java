@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.demo.config.JwtUtil;
 import com.example.demo.exception.UnauthorizedException;
+import com.example.demo.dto.auth.ForgotPasswordRequest;
+
 
 
 @Service
@@ -55,7 +57,8 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("User must be at least 13 years old");
         }
 
-        Role role = roleRepository.findByName(request.getRole())
+        Role role = roleRepository
+                .findByNameIgnoreCase(request.getRole())
                 .orElseThrow(() -> new BadRequestException("Invalid role"));
 
         User user = new User();
@@ -80,8 +83,33 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new UnauthorizedException("Invalid credentials");
         }
+        
+        if (!user.isEnabled()) {
+            throw new UnauthorizedException("Account is deactivated. Use forgot password to reactivate.");
+        }
+
 
         return jwtUtil.generateToken(user.getEmail());
     }
+    
+    @Override
+    public void resetPassword(ForgotPasswordRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BadRequestException("User not found"));
+
+        if (!user.getDateOfBirth().toString()
+                .equals(request.getDateOfBirth())) {
+            throw new BadRequestException("Invalid date of birth");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        // 🔥 Reactivate account if disabled
+        user.setEnabled(true);
+
+        userRepository.save(user);
+    }
+
 
 }

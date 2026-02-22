@@ -30,7 +30,8 @@ public class SecurityConfig {
 	        .authorizeHttpRequests(auth -> auth
 	                .requestMatchers("/auth/**").permitAll()
 	                .requestMatchers("/test-error").permitAll()
-	                .requestMatchers("/artist-only").hasRole("ARTIST")
+	                .requestMatchers("/artist/**").hasRole("ARTIST")
+	                .requestMatchers("/user/**").hasRole("USER")
 	                .anyRequest().authenticated()
 	        );
 
