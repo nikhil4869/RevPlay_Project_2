@@ -8,11 +8,5 @@ import java.util.List;
 
 public interface AnalyticsService {
 	
-	 UserAnalyticsDTO getMyAnalytics();
 
-    Map<String, Object> getListenerSummary();
-
-    List<?> getTopSongs(int limit);
-
-    List<?> getTopGenres();
 }

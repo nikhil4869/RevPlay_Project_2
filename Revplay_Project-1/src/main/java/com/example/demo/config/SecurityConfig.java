@@ -32,6 +32,7 @@ public class SecurityConfig {
 	                .requestMatchers("/test-error").permitAll()
 	                .requestMatchers("/artist/**").hasRole("ARTIST")
 	                .requestMatchers("/user/**").hasRole("USER")
+	                
 	                .anyRequest().authenticated()
 	        );
 

@@ -20,6 +20,8 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 
     // Public songs
     List<Song> findByIsPublicTrue();
+    
+    long countByArtist(User artist);
 
     // Search by title
     List<Song> findByTitleContainingIgnoreCaseAndIsPublicTrue(String title);
@@ -39,4 +41,6 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     //  Recently added songs
     @Query("SELECT s FROM Song s WHERE s.isPublic = true ORDER BY s.createdAt DESC")
     List<Song> findRecentlyAddedSongs(Pageable pageable);
+    
+    
 }

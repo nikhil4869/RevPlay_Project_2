@@ -83,4 +83,10 @@ public class SongController {
         songService.deleteSong(songId);
         return "Song deleted permanently";
     }
+    
+ // get all songs (for listener)
+    @GetMapping
+    public ResponseEntity<List<SongDTO>> getAllSongs() {
+        return ResponseEntity.ok(songService.getAllSongs());
+    }
 }

@@ -13,4 +13,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     Optional<Favorite> findByListenerAndSong(User listener, Song song);
 
     List<Favorite> findByListener(User listener);
+    
+    long countByListener(User listener);
 }

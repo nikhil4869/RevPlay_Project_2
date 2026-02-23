@@ -254,6 +254,14 @@ public class SongServiceImpl implements SongService {
                 song.getArtist().getName()
         );
     }
+    
+    @Override
+    public List<SongDTO> getAllSongs() {
+        return songRepository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
 
 
 

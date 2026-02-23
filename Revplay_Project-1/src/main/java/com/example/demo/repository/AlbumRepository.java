@@ -9,5 +9,6 @@ import java.util.List;
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     List<Album> findByArtist(User artist);
+    long countByArtist(User artist);
 
 }
