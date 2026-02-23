@@ -6,26 +6,27 @@ import java.util.List;
 
 public interface SongService {
 
-    List<SongDTO> getAllSongs();
+	SongDTO uploadSong(String title,
+            String genre,
+            String duration,
+            MultipartFile audioFile,
+            Long albumId,
+            Integer trackNumber);
 
-    SongDTO uploadSong(String title,
-                       String genre,
-                       String duration,
-                       MultipartFile audioFile,
-                       Long albumId,
-                       Integer trackNumber);
+    
+	SongDTO uploadCover(Long songId, MultipartFile image);
 
-    SongDTO uploadCover(Long songId, MultipartFile image);
 
-    List<SongDTO> getMySongs();
+	List<SongDTO> getMySongs();
+	
+	void addSongToAlbum(Long songId, Long albumId, Integer trackNumber);
 
-    void addSongToAlbum(Long songId, Long albumId, Integer trackNumber);
+	List<SongDTO> getAlbumSongs(Long albumId);
+	
+	void removeFromAlbum(Long songId);
 
-    List<SongDTO> getAlbumSongs(Long albumId);
+	void reorderTrack(Long songId, Integer newTrackNumber);
 
-    void removeFromAlbum(Long songId);
+	void deleteSong(Long songId);
 
-    void reorderTrack(Long songId, Integer newTrackNumber);
-
-    void deleteSong(Long songId);
 }
