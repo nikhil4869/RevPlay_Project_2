@@ -30,4 +30,14 @@ public class SearchController {
     public List<SongDTO> searchByGenre(@RequestParam String q) {
         return searchService.searchByGenre(q);
     }
+    
+    @GetMapping("/year")
+    public List<SongDTO> searchByYear(@RequestParam Integer year) {
+        return searchService.searchByYear(year);
+    }
+
+    @GetMapping("/album")
+    public List<SongDTO> searchByAlbum(@RequestParam String name) {
+        return searchService.searchByAlbum(name);
+    }
 }

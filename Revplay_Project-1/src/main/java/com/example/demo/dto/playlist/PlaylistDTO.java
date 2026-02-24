@@ -10,13 +10,15 @@ public class PlaylistDTO {
     private boolean isPublic;
     private List<SongDTO> songs;
     private int totalSongs;
+    private int followerCount;
 
     public PlaylistDTO() {}
 
-    public PlaylistDTO(Long id, String name, boolean isPublic) {
+    public PlaylistDTO(Long id, String name, boolean isPublic,int followerCount) {
         this.id = id;
         this.name = name;
         this.isPublic = isPublic;
+        this.setFollowerCount(followerCount);
     }
 
     public Long getId() {
@@ -58,4 +60,12 @@ public class PlaylistDTO {
     public void setTotalSongs(int totalSongs) {
         this.totalSongs = totalSongs;
     }
+
+	public int getFollowerCount() {
+		return followerCount;
+	}
+
+	public void setFollowerCount(int followerCount) {
+		this.followerCount = followerCount;
+	}
 }

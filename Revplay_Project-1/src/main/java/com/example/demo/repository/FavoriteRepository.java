@@ -15,4 +15,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     List<Favorite> findByListener(User listener);
     
     long countByListener(User listener);
+    
+    
 }

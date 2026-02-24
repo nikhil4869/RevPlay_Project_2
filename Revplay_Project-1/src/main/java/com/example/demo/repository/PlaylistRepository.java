@@ -10,5 +10,7 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Long> {
 
     List<Playlist> findByListener(User listener);
 
-    List<Playlist> findByIsPublicTrue();   // new
+    List<Playlist> findByIsPublicTrue();
+
+    long countByListener(User listener);
 }

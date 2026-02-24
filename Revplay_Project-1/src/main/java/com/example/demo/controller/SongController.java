@@ -25,10 +25,11 @@ public class SongController {
             @RequestParam String duration,
             @RequestParam MultipartFile file,
             @RequestParam(required = false) Long albumId,
-            @RequestParam(required = false) Integer trackNumber) {
+            @RequestParam(required = false) Integer trackNumber,
+            @RequestParam Integer releaseYear) {
 
         return ResponseEntity.ok(
-                songService.uploadSong(title, genre, duration, file, albumId, trackNumber));
+                songService.uploadSong(title, genre, duration, file, albumId, trackNumber,releaseYear));
     }
 
     // get songs uploaded by artist

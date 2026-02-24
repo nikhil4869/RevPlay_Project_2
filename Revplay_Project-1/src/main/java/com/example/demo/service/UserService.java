@@ -1,8 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.user.UserProfileDTO;
+import com.example.demo.dto.user.DashboardDTO;
 import com.example.demo.dto.user.UpdateProfileDTO;
-import com.example.demo.dto.user.UserStatsDTO;
+
 
 public interface UserService {
 
@@ -10,7 +11,9 @@ public interface UserService {
 
     void updateMyProfile(UpdateProfileDTO dto);
 
-    UserStatsDTO getMyStats();
+  
 
     void deactivateMyAccount();
+    
+    DashboardDTO getMyDashboard();
 }

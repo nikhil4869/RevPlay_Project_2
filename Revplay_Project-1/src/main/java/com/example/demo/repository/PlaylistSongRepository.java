@@ -6,12 +6,13 @@ import com.example.demo.entity.Song;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PlaylistSongRepository extends JpaRepository<PlaylistSong, Long> {
 
-    boolean existsByPlaylistAndSong(Playlist playlist, Song song);
+//    List<PlaylistSong> findByPlaylistOrderByPositionAsc(Playlist playlist);
 
-    List<PlaylistSong> findByPlaylist(Playlist playlist);
+    Optional<PlaylistSong> findByPlaylistAndSong(Playlist playlist, Song song);
 
-    long countByPlaylist(Playlist playlist);
+    void deleteByPlaylistAndSong(Playlist playlist, Song song);
 }

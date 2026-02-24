@@ -1,20 +1,25 @@
 package com.example.demo.service.impl;
 
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
 import com.example.demo.dto.music.SongDTO;
 import com.example.demo.entity.ListeningHistory;
 import com.example.demo.entity.Song;
 import com.example.demo.entity.User;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ListeningHistoryRepository;
 import com.example.demo.repository.SongRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.HistoryService;
 import com.example.demo.util.SecurityUtil;
-
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class HistoryServiceImpl implements HistoryService {
@@ -29,6 +34,12 @@ public class HistoryServiceImpl implements HistoryService {
         this.historyRepository = historyRepository;
         this.songRepository = songRepository;
         this.userRepository = userRepository;
+    }
+    private User getCurrentUser() {
+        String email = SecurityUtil.getCurrentUserEmail();
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
@@ -80,7 +91,7 @@ public class HistoryServiceImpl implements HistoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         return historyRepository
-                .findTop10ByListenerOrderByPlayedAtDesc(listener)
+                .findTop5ByListenerOrderByPlayedAtDesc(listener)
                 .stream()
                 .map(h -> new SongDTO(
                         h.getSong().getId(),
@@ -92,5 +103,50 @@ public class HistoryServiceImpl implements HistoryService {
                         h.getSong().getArtist().getName()
                 ))
                 .toList();
+    }
+    
+    @Override
+    public List<SongDTO> getMyHistory(int page, int size) {
+
+        User user = getCurrentUser();
+
+        if (page < 0 || size <= 0) {
+            throw new BadRequestException("Invalid pagination values");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ListeningHistory> historyPage =
+                historyRepository.findByListenerOrderByPlayedAtDesc( user,  pageable);
+
+        return historyPage.getContent()
+                .stream()
+                .map(h -> mapSongToDTO(h.getSong()))
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public void clearMyHistory() {
+
+        User user = getCurrentUser();
+
+        long count = historyRepository.countByListener(user);
+
+        if (count == 0) {
+            throw new BadRequestException("History already empty");
+        }
+
+        historyRepository.deleteByListener(user);
+    }
+    private SongDTO mapSongToDTO(Song song) {
+        return new SongDTO(
+                song.getId(),
+                song.getTitle(),
+                song.getGenre(),
+                song.getDuration(),
+                song.getAudioPath(),
+                song.getCoverImage(),
+                song.getArtist().getName()
+        );
     }
 }

@@ -6,12 +6,13 @@ import java.util.List;
 
 public interface SongService {
 
-	SongDTO uploadSong(String title,
+	public SongDTO uploadSong(String title,
             String genre,
             String duration,
             MultipartFile audioFile,
             Long albumId,
-            Integer trackNumber);
+            Integer trackNumber,
+            Integer releaseYear);
 
     
 	SongDTO uploadCover(Long songId, MultipartFile image);

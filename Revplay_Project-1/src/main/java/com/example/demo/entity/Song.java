@@ -28,6 +28,8 @@ public class Song {
     private String title;
 
     private String genre;
+    
+    private Integer releaseYear;
 
     private String duration;
 
@@ -167,4 +169,12 @@ public class Song {
     public void setTrackNumber(Integer trackNumber) {
         this.trackNumber = trackNumber;
     }
+
+	public Integer getReleaseYear() {
+		return releaseYear;
+	}
+
+	public void setReleaseYear(Integer releaseYear) {
+		this.releaseYear = releaseYear;
+	}
 }

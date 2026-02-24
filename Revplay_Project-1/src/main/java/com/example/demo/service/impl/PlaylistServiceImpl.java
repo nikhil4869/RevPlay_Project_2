@@ -1,19 +1,24 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.music.SongDTO;
 import com.example.demo.dto.playlist.PlaylistDTO;
+import com.example.demo.dto.playlist.PlaylistRecordingDTO;
 import com.example.demo.entity.*;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.exception.UnauthorizedException;
 import com.example.demo.repository.*;
 import com.example.demo.service.PlaylistService;
 import com.example.demo.util.SecurityUtil;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PlaylistServiceImpl implements PlaylistService {
@@ -22,47 +27,113 @@ public class PlaylistServiceImpl implements PlaylistService {
     private final PlaylistSongRepository playlistSongRepository;
     private final SongRepository songRepository;
     private final UserRepository userRepository;
+    private final PlaylistRecordingRepository playlistRecordingRepository;
 
     public PlaylistServiceImpl(PlaylistRepository playlistRepository,
-                               PlaylistSongRepository playlistSongRepository,
-                               SongRepository songRepository,
-                               UserRepository userRepository) {
-        this.playlistRepository = playlistRepository;
-        this.playlistSongRepository = playlistSongRepository;
-        this.songRepository = songRepository;
-        this.userRepository = userRepository;
+            PlaylistSongRepository playlistSongRepository,
+            SongRepository songRepository,
+            UserRepository userRepository,
+            PlaylistRecordingRepository playlistRecordingRepository) {
+
+this.playlistRepository = playlistRepository;
+this.playlistSongRepository = playlistSongRepository;
+this.songRepository = songRepository;
+this.userRepository = userRepository;
+this.playlistRecordingRepository = playlistRecordingRepository;
+}
+
+    private User getCurrentUser() {
+        String email = SecurityUtil.getCurrentUserEmail();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    // ================= CREATE PLAYLIST =================
+    private void validateOwner(Playlist playlist, User user) {
+        if (!playlist.getListener().getId().equals(user.getId())) {
+            throw new BadRequestException("Unauthorized access");
+        }
+    }
 
+    // CREATE
     @Override
-    public PlaylistDTO createPlaylist(String name) {
+    public void createPlaylist(String name, boolean isPublic) {
 
-        User listener = getCurrentUser();
+        User user = getCurrentUser();
 
         Playlist playlist = new Playlist();
         playlist.setName(name);
-        playlist.setListener(listener);
-        playlist.setPublic(false); // default private
+        playlist.setPublic(isPublic);
+        playlist.setListener(user);
 
-        return mapBasicDTO(playlistRepository.save(playlist));
+        playlistRepository.save(playlist);
     }
 
-    // ================= ADD SONG =================
-
+    // UPDATE
     @Override
-    public void addSongToPlaylist(Long playlistId, Long songId) {
+    public void updatePlaylist(Long playlistId, String name, boolean isPublic) {
 
-        Playlist playlist = getOwnedPlaylist(playlistId);
+        User user = getCurrentUser();
+
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist not found"));
+
+        validateOwner(playlist, user);
+
+        playlist.setName(name);
+        playlist.setPublic(isPublic);
+
+        playlistRepository.save(playlist);
+    }
+
+    // MY PLAYLISTS
+    @Override
+    public List<PlaylistDTO> getMyPlaylists() {
+
+        User user = getCurrentUser();
+
+        return playlistRepository.findByListener(user)
+                .stream()
+                .map(p -> new PlaylistDTO(
+                        p.getId(),
+                        p.getName(),
+                        p.isPublic(),
+                        p.getFollowers().size()
+                ))
+                .toList();
+    }
+
+    // PUBLIC PLAYLISTS
+    @Override
+    public List<PlaylistDTO> getPublicPlaylists() {
+
+        return playlistRepository.findByIsPublicTrue()
+                .stream()
+                .map(p -> new PlaylistDTO(
+                        p.getId(),
+                        p.getName(),
+                        true,
+                        p.getFollowers().size()
+                ))
+                .toList();
+    }
+
+    // ADD SONG
+    @Override
+    public void addSong(Long playlistId, Long songId) {
+
+        User user = getCurrentUser();
+
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist not found"));
+
+        validateOwner(playlist, user);
 
         Song song = songRepository.findById(songId)
                 .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
 
-        if (!song.isPublic()) {
-            throw new BadRequestException("Cannot add private song to playlist");
-        }
-
-        if (playlistSongRepository.existsByPlaylistAndSong(playlist, song)) {
+        if (playlistSongRepository
+                .findByPlaylistAndSong(playlist, song)
+                .isPresent()) {
             throw new BadRequestException("Song already in playlist");
         }
 
@@ -73,138 +144,170 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlistSongRepository.save(ps);
     }
 
-    // ================= REMOVE SONG =================
-
+    // REMOVE SONG
     @Override
-    public void removeSongFromPlaylist(Long playlistId, Long songId) {
+    public void removeSong(Long playlistId, Long songId) {
 
-        Playlist playlist = getOwnedPlaylist(playlistId);
+        User user = getCurrentUser();
 
-        PlaylistSong ps = playlistSongRepository.findByPlaylist(playlist)
-                .stream()
-                .filter(p -> p.getSong().getId().equals(songId))
-                .findFirst()
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist not found"));
+
+        validateOwner(playlist, user);
+
+        Song song = songRepository.findById(songId)
+                .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
+
+        PlaylistSong ps = playlistSongRepository
+                .findByPlaylistAndSong(playlist, song)
                 .orElseThrow(() -> new ResourceNotFoundException("Song not in playlist"));
 
         playlistSongRepository.delete(ps);
     }
 
-    // ================= MY PLAYLISTS =================
-
+    // FOLLOW
     @Override
-    public List<PlaylistDTO> getMyPlaylists() {
+    public void followPlaylist(Long playlistId) {
 
-        User listener = getCurrentUser();
-
-        return playlistRepository.findByListener(listener)
-                .stream()
-                .map(this::mapBasicDTO)
-                .collect(Collectors.toList());
-    }
-
-    // ================= PLAYLIST WITH SONGS =================
-
-    @Override
-    public PlaylistDTO getPlaylistWithSongs(Long playlistId) {
+        User user = getCurrentUser();
 
         Playlist playlist = playlistRepository.findById(playlistId)
                 .orElseThrow(() -> new ResourceNotFoundException("Playlist not found"));
 
-        User currentUser = getCurrentUser();
-
-        // 🔐 Security Check
-        if (!playlist.isPublic() &&
-            !playlist.getListener().getId().equals(currentUser.getId())) {
-
-            throw new UnauthorizedException("You cannot access this private playlist");
+        if (!playlist.isPublic()) {
+            throw new BadRequestException("Cannot follow private playlist");
         }
 
-        List<PlaylistSong> playlistSongs =
-                playlistSongRepository.findByPlaylist(playlist);
+        if (playlist.getFollowers().contains(user)) {
+            throw new BadRequestException("Already following");
+        }
 
-        PlaylistDTO dto = mapBasicDTO(playlist);
-
-        dto.setSongs(
-                playlistSongs.stream()
-                        .map(ps -> mapSong(ps.getSong()))
-                        .collect(Collectors.toList())
-        );
-
-        dto.setTotalSongs(playlistSongs.size());
-
-        return dto;
+        playlist.getFollowers().add(user);
+        playlistRepository.save(playlist);
     }
 
-    // ================= CHANGE VISIBILITY =================
-
+    // UNFOLLOW
     @Override
-    public PlaylistDTO changeVisibility(Long playlistId, boolean isPublic) {
+    public void unfollowPlaylist(Long playlistId) {
 
-        Playlist playlist = getOwnedPlaylist(playlistId);
-
-        playlist.setPublic(isPublic);
-
-        return mapBasicDTO(playlistRepository.save(playlist));
-    }
-
-    // ================= PUBLIC PLAYLISTS =================
-
-    @Override
-    public List<PlaylistDTO> getPublicPlaylists() {
-
-        return playlistRepository.findByIsPublicTrue()
-                .stream()
-                .map(this::mapBasicDTO)
-                .collect(Collectors.toList());
-    }
-
-    // ================= HELPER METHODS =================
-
-    private User getCurrentUser() {
-
-        String email = SecurityUtil.getCurrentUserEmail();
-
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
-    private Playlist getOwnedPlaylist(Long playlistId) {
-
-        User listener = getCurrentUser();
+        User user = getCurrentUser();
 
         Playlist playlist = playlistRepository.findById(playlistId)
                 .orElseThrow(() -> new ResourceNotFoundException("Playlist not found"));
 
-        if (!playlist.getListener().getId().equals(listener.getId())) {
-            throw new UnauthorizedException("Unauthorized access");
+        playlist.getFollowers().remove(user);
+        playlistRepository.save(playlist);
+    }
+
+    // DELETE
+    @Override
+    public void deletePlaylist(Long playlistId) {
+
+        User user = getCurrentUser();
+
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist not found"));
+
+        validateOwner(playlist, user);
+
+        playlistRepository.delete(playlist);
+    }
+    
+    @Override
+    public void recordFromPlaylist(Long playlistId, Long songId) {
+
+        User user = getCurrentUser();
+
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist not found"));
+
+        Song song = songRepository.findById(songId)
+                .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
+
+        playlistSongRepository.findByPlaylistAndSong(playlist, song)
+                .orElseThrow(() -> new BadRequestException("Song not in playlist"));
+
+        try {
+
+            // 🔹 Get original static audio path
+            String staticBase = System.getProperty("user.dir")
+                    + "/src/main/resources/static";
+
+            Path source = Paths.get(staticBase + song.getAudioPath());
+
+            if (!Files.exists(source)) {
+                throw new RuntimeException("Original file not found at: " + source);
+            }
+
+            // 🔹 Save recording inside uploads/recordings
+            String uploadBase = System.getProperty("user.dir")
+                    + "/uploads/recordings/";
+
+            Files.createDirectories(Paths.get(uploadBase));
+
+            String newFileName = "recorded_" + System.currentTimeMillis() + ".mp3";
+
+            Path target = Paths.get(uploadBase + newFileName);
+
+            Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+
+            PlaylistRecording recording = new PlaylistRecording();
+            recording.setUser(user);
+            recording.setPlaylist(playlist);
+            recording.setSong(song);
+            recording.setFilePath("/uploads/recordings/" + newFileName);
+            recording.setDurationSeconds(0);
+
+            playlistRecordingRepository.save(recording);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Recording failed: " + e.getMessage());
+        }
+    }
+    
+    public List<PlaylistRecordingDTO> getPlaylistRecordings(Long playlistId) {
+
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new ResourceNotFoundException("Playlist not found"));
+
+        List<PlaylistRecording> recordings =
+                playlistRecordingRepository.findByPlaylist(playlist);
+
+        return recordings.stream()
+                .map(r -> new PlaylistRecordingDTO(
+                        r.getId(),
+                        r.getSong().getTitle() + " [Recorded]",  
+                        r.getFilePath()
+                ))
+                .toList();
+    }
+    
+    @Override
+    public void deleteRecording(Long recordingId) {
+
+        User user = getCurrentUser();
+
+        PlaylistRecording recording =
+                playlistRecordingRepository.findById(recordingId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException("Recording not found"));
+
+        //  Only owner can delete
+        if (!recording.getUser().getId().equals(user.getId())) {
+            throw new BadRequestException("Unauthorized access");
         }
 
-        return playlist;
+        // Delete physical file
+        try {
+            String basePath = System.getProperty("user.dir");
+            Path filePath = Paths.get(basePath + recording.getFilePath());
+            Files.deleteIfExists(filePath);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete recording file");
+        }
+
+        // Delete DB record
+        playlistRecordingRepository.delete(recording);
     }
 
-    private PlaylistDTO mapBasicDTO(Playlist playlist) {
-
-        long count = playlistSongRepository.countByPlaylist(playlist);
-
-        PlaylistDTO dto = new PlaylistDTO();
-        dto.setId(playlist.getId());
-        dto.setName(playlist.getName());
-        dto.setPublic(playlist.isPublic());
-        dto.setTotalSongs((int) count);
-
-        return dto;
-    }
-
-    private SongDTO mapSong(Song song) {
-
-        return new SongDTO(
-                song.getId(),
-                song.getTitle(),
-                song.getGenre(),
-                song.getDuration(),
-                song.getAudioPath(),
-                song.getCoverImage(),
-                song.getArtist().getName()
-        );
-    }
 }

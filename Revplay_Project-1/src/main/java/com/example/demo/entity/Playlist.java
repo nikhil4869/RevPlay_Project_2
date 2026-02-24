@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,16 +13,52 @@ public class Playlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
-
-    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
     private boolean isPublic = false;   // default private
 
-    @ManyToOne
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+   
+    // OWNER (Listener)
+    
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "listener_id", nullable = false)
     private User listener;
+
+    
+    // SONGS (with ordering support)
+    
+    @OneToMany(mappedBy = "playlist",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @OrderBy("position ASC")   //  automatic ordering
+    private List<PlaylistSong> songs = new ArrayList<>();
+
+    
+    // FOLLOWERS
+   
+    @ManyToMany
+    @JoinTable(
+            name = "playlist_followers",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> followers = new ArrayList<>();
+
+    
+    // AUTO SET CREATED TIME
+    
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+    
+  
+
 
     public Long getId() {
         return id;
@@ -35,6 +72,18 @@ public class Playlist {
         this.name = name;
     }
 
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
     public User getListener() {
         return listener;
     }
@@ -43,20 +92,19 @@ public class Playlist {
         this.listener = listener;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public List<PlaylistSong> getSongs() {
+        return songs;
     }
 
-    public boolean isPublic() {
-        return isPublic;
+    public void setSongs(List<PlaylistSong> songs) {
+        this.songs = songs;
     }
 
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
+    public List<User> getFollowers() {
+        return followers;
     }
-    
-    @OneToMany(mappedBy = "playlist",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<PlaylistSong> songs;
+
+    public void setFollowers(List<User> followers) {
+        this.followers = followers;
+    }
 }

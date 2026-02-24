@@ -10,4 +10,8 @@ public interface HistoryService {
     List<SongDTO> getMyHistory();
 
     List<SongDTO> getRecentlyPlayed();
+    
+    List<SongDTO> getMyHistory(int page, int size);
+
+    void clearMyHistory();
 }

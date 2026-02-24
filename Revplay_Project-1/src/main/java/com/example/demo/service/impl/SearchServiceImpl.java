@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.music.SongDTO;
 import com.example.demo.entity.Song;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.SongRepository;
 import com.example.demo.service.SearchService;
 import org.springframework.stereotype.Service;
@@ -71,5 +72,34 @@ public class SearchServiceImpl implements SearchService {
                 song.getCoverImage(),
                 song.getArtist().getName()
         );
+    }
+    
+    @Override
+    public List<SongDTO> searchByYear(Integer year) {
+
+        List<Song> songs = songRepository.findByReleaseYear(year);
+
+        if (songs.isEmpty()) {
+            throw new ResourceNotFoundException("No songs found for year " + year);
+        }
+
+        return songs.stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
+    
+    @Override
+    public List<SongDTO> searchByAlbum(String albumName) {
+
+        List<Song> songs = songRepository
+                .findByAlbum_NameIgnoreCase(albumName);
+
+        if (songs.isEmpty()) {
+            throw new ResourceNotFoundException("Album not found");
+        }
+
+        return songs.stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 }

@@ -10,4 +10,8 @@ public interface SearchService {
     List<SongDTO> searchByArtist(String artistName);
 
     List<SongDTO> searchByGenre(String genre);
+    
+    List<SongDTO> searchByYear(Integer year);
+
+    List<SongDTO> searchByAlbum(String albumName);
 }

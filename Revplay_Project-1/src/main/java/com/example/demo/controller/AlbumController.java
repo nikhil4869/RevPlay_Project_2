@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.dto.music.AlbumDTO;
+import com.example.demo.dto.music.AlbumDetailsDTO;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -44,5 +46,10 @@ public class AlbumController {
     @GetMapping("/my")
     public ResponseEntity<List<AlbumDTO>> getMyAlbums() {
         return ResponseEntity.ok(albumService.getMyAlbums());
+    }
+    
+    @GetMapping("/{id}")
+    public AlbumDetailsDTO getAlbum(@PathVariable Long id) {
+        return albumService.getAlbumDetails(id);
     }
 }

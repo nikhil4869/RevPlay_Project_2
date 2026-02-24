@@ -43,7 +43,8 @@ public class SongServiceImpl implements SongService {
             String duration,
             MultipartFile audioFile,
             Long albumId,
-            Integer trackNumber) {
+            Integer trackNumber,
+            Integer releaseYear) {
 
         String email = SecurityUtil.getCurrentUserEmail();
 
@@ -58,6 +59,7 @@ public class SongServiceImpl implements SongService {
         song.setDuration(duration);
         song.setAudioPath(filePath);
         song.setArtist(artist);
+        song.setReleaseYear(releaseYear); 
         
      //  if album provided, attach song to album
         if (albumId != null) {
