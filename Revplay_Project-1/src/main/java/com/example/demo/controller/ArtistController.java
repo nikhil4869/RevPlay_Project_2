@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.music.ArtistDTO;
 import com.example.demo.service.ArtistService;
+
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +50,8 @@ public class ArtistController {
         return ResponseEntity.ok(artistService.updateProfile(dto));
     }
 
+
+    
     // get my profile (artist dashboard)
     @GetMapping("/profile")
     public ResponseEntity<ArtistDTO> getMyProfile() {

@@ -162,4 +162,12 @@ public class SongServiceImpl implements SongService {
 		// TODO Auto-generated method stub
 		
 	}
+	
+//	@Override
+//	public List<SongDTO> getAllSongs() {
+//	    return songRepository.findAll()
+//	            .stream()
+//	            .map(this::mapToDTO)
+//	            .toList();
+//	}
 }
