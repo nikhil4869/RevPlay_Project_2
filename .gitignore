@@ -1,5 +1,4 @@
 .metadata/
-bin/
-target/
-.sonarlint/
 *.log
+*.class
+target/

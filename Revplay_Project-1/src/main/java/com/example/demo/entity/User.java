@@ -34,9 +34,21 @@ public class User {
 
 	private boolean enabled = true;
 
+<<<<<<< HEAD
 	@ManyToOne
 	@JoinColumn(name = "role_id")
 	private Role role;
+=======
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+    
+    @Column(length = 500)
+    private String bio;
+
+    private String profileImage;
+
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 
 	public User() {
 	}
@@ -94,4 +106,24 @@ public class User {
 	}
 	
 
+<<<<<<< HEAD
+=======
+    public void setRole(Role role) { this.role = role; }
+    
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+    
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 }

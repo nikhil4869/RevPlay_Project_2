@@ -3,6 +3,10 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Album;
 import com.example.demo.entity.User;
 import com.example.demo.exception.BadRequestException;
+<<<<<<< HEAD
+=======
+import com.example.demo.exception.DuplicateResourceException;
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AlbumRepository;
 import com.example.demo.repository.UserRepository;
@@ -45,14 +49,27 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public AlbumDTO createAlbum(String name,
+<<<<<<< HEAD
                              String description,
                              LocalDate releaseDate) {
+=======
+                                String description,
+                                LocalDate releaseDate) {
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 
         String email = SecurityUtil.getCurrentUserEmail();
 
         User artist = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+<<<<<<< HEAD
+=======
+        // 🚫 prevent duplicate albums
+        if (albumRepository.existsByNameIgnoreCaseAndArtist(name, artist)) {
+            throw new DuplicateResourceException("Album with this name already exists");
+        }
+
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
         Album album = new Album();
         album.setName(name);
         album.setDescription(description);
@@ -96,5 +113,26 @@ public class AlbumServiceImpl implements AlbumService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
+<<<<<<< HEAD
+=======
+    
+    @Override
+    public AlbumDTO getAlbumDetails(Long albumId) {
+
+        Album album = albumRepository.findById(albumId)
+                .orElseThrow(() -> new ResourceNotFoundException("Album not found"));
+
+        return mapToDTO(album);
+    }
+
+    @Override
+    public List<AlbumDTO> getAllAlbums() {
+        return albumRepository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 
 }

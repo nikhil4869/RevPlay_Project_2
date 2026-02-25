@@ -76,8 +76,11 @@ public class ArtistServiceImpl implements ArtistService {
         profile.setTwitter(dto.getTwitter());
         profile.setYoutube(dto.getYoutube());
         profile.setWebsite(dto.getWebsite());
+<<<<<<< HEAD
         profile.setProfileImage(dto.getProfileImage());
         profile.setBannerImage(dto.getBannerImage());
+=======
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 
         artistRepository.save(profile);
 

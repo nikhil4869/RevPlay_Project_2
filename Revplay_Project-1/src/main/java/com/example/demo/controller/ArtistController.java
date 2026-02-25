@@ -2,7 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.music.ArtistDTO;
 import com.example.demo.service.ArtistService;
+<<<<<<< HEAD
 
+=======
+import com.example.demo.service.SongService;
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +18,25 @@ import org.springframework.web.multipart.MultipartFile;
 public class ArtistController {
 
     private final ArtistService artistService;
+<<<<<<< HEAD
 
     public ArtistController(ArtistService artistService) {
         this.artistService = artistService;
     }
 
     // create artist profile
+=======
+    private final SongService songService;
+
+
+
+    public ArtistController(ArtistService artistService, SongService songService) {
+		this.artistService = artistService;
+		this.songService = songService;
+	}
+
+	// create artist profile
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     @PostMapping("/profile")
     public ResponseEntity<ArtistDTO> createProfile(@RequestBody ArtistDTO dto) {
         return ResponseEntity.ok(artistService.createProfile(dto));
@@ -50,8 +67,11 @@ public class ArtistController {
         return ResponseEntity.ok(artistService.updateProfile(dto));
     }
 
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     // get my profile (artist dashboard)
     @GetMapping("/profile")
     public ResponseEntity<ArtistDTO> getMyProfile() {
@@ -63,4 +83,14 @@ public class ArtistController {
     public ResponseEntity<ArtistDTO> getArtistProfile(@PathVariable Long id) {
         return ResponseEntity.ok(artistService.getArtistProfile(id));
     }
+<<<<<<< HEAD
+=======
+    
+    //View songs favourated
+    @GetMapping("/song-favorites")
+    public ResponseEntity<?> getFavoriteStats() {
+        return ResponseEntity.ok(songService.getFavoriteStatsForMySongs());
+    }
+
+>>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 }
