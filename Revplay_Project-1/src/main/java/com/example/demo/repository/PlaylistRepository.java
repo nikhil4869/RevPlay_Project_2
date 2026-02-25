@@ -1,5 +1,15 @@
 package com.example.demo.repository;
 
-public interface PlaylistRepository {
+import com.example.demo.entity.Playlist;
+import com.example.demo.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
+public interface PlaylistRepository extends JpaRepository<Playlist, Long> {
+
+    List<Playlist> findByUser(User user);
+
+    List<Playlist> findByIsPublicTrue();
+    
+    long countByUser(User user);
 }

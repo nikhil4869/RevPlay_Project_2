@@ -5,6 +5,7 @@ import com.example.demo.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.dto.auth.AuthRequest;
 import com.example.demo.dto.auth.AuthResponse;
+import com.example.demo.dto.auth.ForgotPasswordRequest;
 
 
 @RestController
@@ -30,5 +31,12 @@ public class AuthController {
 
         return new AuthResponse(token);
     }
+    
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        authService.resetPassword(request);
+        return "Password reset successful. You can login now.";
+    }
+
 
 }

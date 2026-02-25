@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.demo.config.JwtUtil;
 import com.example.demo.exception.UnauthorizedException;
+import com.example.demo.dto.auth.ForgotPasswordRequest;
+
 
 
 @Service
@@ -81,8 +83,36 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new UnauthorizedException("Invalid credentials");
         }
+        
+        if (!user.isEnabled()) {
+            throw new UnauthorizedException("Account is deactivated. Use forgot password to reactivate.");
+        }
+
 
         return jwtUtil.generateToken(user.getEmail());
     }
+    
+    @Override
+    public void resetPassword(ForgotPasswordRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BadRequestException("User not found"));
+
+        if (!user.getDateOfBirth().toString()
+                .equals(request.getDateOfBirth())) {
+            throw new BadRequestException("Invalid date of birth");
+        }
+
+        if (!PasswordValidator.isStrong(request.getNewPassword())) {
+            throw new BadRequestException("Password not strong enough");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user.setEnabled(true);
+
+        userRepository.save(user);
+    }
+
+
 
 }
