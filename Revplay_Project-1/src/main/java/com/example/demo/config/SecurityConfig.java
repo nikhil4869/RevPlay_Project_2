@@ -31,10 +31,6 @@ public class SecurityConfig {
 	        .authorizeHttpRequests(auth -> auth
 	                .requestMatchers("/auth/**").permitAll()
 	                .requestMatchers("/test-error").permitAll()
-<<<<<<< HEAD
-	                .requestMatchers("/artist/**").hasRole("ARTIST")
-	                .requestMatchers("/user/**").hasRole("USER")
-=======
 
 	                // PUBLIC DISCOVERY
 	                .requestMatchers(HttpMethod.GET, "/albums/**").permitAll()
@@ -68,12 +64,8 @@ public class SecurityConfig {
 	                .requestMatchers(HttpMethod.GET, "/playlists/public/**").permitAll()
 	                // USER playlist features
 	                .requestMatchers("/playlists/**").hasRole("USER")
-<<<<<<< HEAD
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
-=======
 	                .requestMatchers("/images/**").permitAll()
 	                .requestMatchers("/audio/**").permitAll()
->>>>>>> d4f4593 (Initial commit of RevPlay project)
 	                .anyRequest().authenticated()
 
 	        );

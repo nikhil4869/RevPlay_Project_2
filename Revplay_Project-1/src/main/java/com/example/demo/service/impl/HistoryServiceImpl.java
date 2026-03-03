@@ -1,75 +1,5 @@
 package com.example.demo.service.impl;
 
-<<<<<<< HEAD
-import com.example.demo.dto.music.SongDTO;
-import com.example.demo.entity.ListeningHistory;
-import com.example.demo.entity.Song;
-import com.example.demo.entity.User;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.ListeningHistoryRepository;
-import com.example.demo.repository.SongRepository;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.HistoryService;
-import com.example.demo.util.SecurityUtil;
-
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Service
-public class HistoryServiceImpl implements HistoryService {
-
-    private final ListeningHistoryRepository historyRepository;
-    private final SongRepository songRepository;
-    private final UserRepository userRepository;
-
-    public HistoryServiceImpl(ListeningHistoryRepository historyRepository,
-                              SongRepository songRepository,
-                              UserRepository userRepository) {
-        this.historyRepository = historyRepository;
-        this.songRepository = songRepository;
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public void recordPlay(Long songId) {
-
-        String email = SecurityUtil.getCurrentUserEmail();
-
-        User listener = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        Song song = songRepository.findById(songId)
-                .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
-
-        ListeningHistory history = new ListeningHistory();
-        history.setListener(listener);
-        history.setSong(song);
-
-        historyRepository.save(history);
-    }
-
-    @Override
-    public List<SongDTO> getMyHistory() {
-
-        String email = SecurityUtil.getCurrentUserEmail();
-
-        User listener = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        return historyRepository.findByListenerOrderByPlayedAtDesc(listener)
-                .stream()
-                .map(h -> new SongDTO(
-                        h.getSong().getId(),
-                        h.getSong().getTitle(),
-                        h.getSong().getGenre(),
-                        h.getSong().getDuration(),
-                        h.getSong().getAudioPath(),
-                        h.getSong().getCoverImage(),
-                        h.getSong().getArtist().getName()
-                ))
-=======
 import com.example.demo.dto.music.HistoryDTO;
 import com.example.demo.dto.music.ListeningTimeDTO;
 import com.example.demo.entity.PlayHistory;
@@ -124,7 +54,6 @@ public class HistoryServiceImpl implements HistoryService {
                 .findTop50ByUserOrderByPlayedAtDesc(user)
                 .stream()
                 .map(this::mapToDTO)
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
                 .collect(Collectors.toList());
 
         logger.info("Recent history fetched for user: {} - Records: {}", email, history.size());
@@ -133,28 +62,6 @@ public class HistoryServiceImpl implements HistoryService {
     }
 
     @Override
-<<<<<<< HEAD
-    public List<SongDTO> getRecentlyPlayed() {
-
-        String email = SecurityUtil.getCurrentUserEmail();
-
-        User listener = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        return historyRepository
-                .findTop10ByListenerOrderByPlayedAtDesc(listener)
-                .stream()
-                .map(h -> new SongDTO(
-                        h.getSong().getId(),
-                        h.getSong().getTitle(),
-                        h.getSong().getGenre(),
-                        h.getSong().getDuration(),
-                        h.getSong().getAudioPath(),
-                        h.getSong().getCoverImage(),
-                        h.getSong().getArtist().getName()
-                ))
-                .toList();
-=======
     public List<HistoryDTO> getFullHistory() {
 
         String email = SecurityUtil.getCurrentUserEmail();
@@ -237,13 +144,9 @@ public class HistoryServiceImpl implements HistoryService {
                         (Long) obj[2]
                 ))
                 .collect(Collectors.toList());
-<<<<<<< HEAD
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
-=======
 
         logger.info("Most played songs fetched for user: {} - Records: {}", email, mostPlayed.size());
 
         return mostPlayed;
->>>>>>> d4f4593 (Initial commit of RevPlay project)
     }
 }

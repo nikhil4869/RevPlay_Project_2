@@ -45,8 +45,6 @@ public class AlbumController {
     public ResponseEntity<List<AlbumDTO>> getMyAlbums() {
         return ResponseEntity.ok(albumService.getMyAlbums());
     }
-<<<<<<< HEAD
-=======
     
     //  album details
     @GetMapping("/{id}")
@@ -76,5 +74,4 @@ public class AlbumController {
         return "Album deleted successfully";
     }
 
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 }

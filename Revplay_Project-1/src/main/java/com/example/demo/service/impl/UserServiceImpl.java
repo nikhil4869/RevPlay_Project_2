@@ -1,17 +1,12 @@
 package com.example.demo.service.impl;
 
-<<<<<<< HEAD
-=======
 import com.example.demo.dto.music.UserProfileDTO;
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 import com.example.demo.entity.User;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import com.example.demo.util.SecurityUtil;
 import org.springframework.stereotype.Service;
-<<<<<<< HEAD
-=======
 import com.example.demo.service.FileStorageService;
 import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.dto.user.UserDashboardDTO;
@@ -170,27 +165,5 @@ public class UserServiceImpl implements UserService {
                 user.getProfileImage()
         );
     }
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 
-@Service
-public class UserServiceImpl implements UserService {
-
-    private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public void deactivateMyAccount() {
-
-        String email = SecurityUtil.getCurrentUserEmail();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        user.setEnabled(false);
-
-        userRepository.save(user);
-    }
 }

@@ -1576,71 +1576,58 @@ java.io.IOException
 2026-03-03 12:51:47 [main] ERROR com.example.demo.service.impl.ArtistServiceImpl - Artist profile not found for user id: 1
 2026-03-03 12:51:47 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Creating artist profile
 2026-03-03 12:51:47 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Artist profile created successfully. Profile id: null, User id: 1
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - User test@mail.com requested to play song with id: 1
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.PlayerServiceImpl - User not found while playing song. Email: test@mail.com
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - User test@mail.com requested to play song with id: 1
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.PlayerServiceImpl - Play count incremented for song 'Test Song' (ID: 1) by user test@mail.com
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.PlayerServiceImpl - Play history saved for user test@mail.com and song 'Test Song'
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - User test@mail.com requested to play song with id: 1
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.PlayerServiceImpl - Play history saved for user test@mail.com and song 'Test Song'
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - Fetching trending songs with limit: 1
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.PlayerServiceImpl - Trending songs fetched. Total returned: 1
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - User test@mail.com requested to play song with id: 1
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.PlayerServiceImpl - Song not found. Song ID: 1
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.PlaylistServiceImpl - Follow playlist request. User=test@mail.com, PlaylistId=10
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.PlaylistServiceImpl - User test@mail.com followed playlist 'Test Playlist'
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.PlaylistServiceImpl - Follow playlist request. User=test@mail.com, PlaylistId=10
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.PlaylistServiceImpl - User tried to follow own playlist. User=test@mail.com
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching listener insights
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AnalyticsServiceImpl - Listener insights generated for artist id: 1. Unique listeners: 25
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching play chart data
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AnalyticsServiceImpl - Play chart generated for artist id: 1. Total songs: 1
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching artist analytics
-2026-03-03 21:24:25 [main] ERROR com.example.demo.service.impl.AnalyticsServiceImpl - Artist not found with email: unknown@test.com
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching daily trends
-2026-03-03 21:24:25 [main] ERROR com.example.demo.service.impl.AnalyticsServiceImpl - Artist not found with email: unknown@test.com
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching artist analytics
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AnalyticsServiceImpl - Artist analytics generated. Artist id: 1, Songs: 5, Albums: 2, Plays: 100, Favorites: 20
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching daily trends
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AnalyticsServiceImpl - Daily trends generated for artist id: 1. Total days: 2
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching play chart data
-2026-03-03 21:24:25 [main] ERROR com.example.demo.service.impl.AnalyticsServiceImpl - Artist not found with email: unknown@test.com
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching album details for id: 10
-2026-03-03 21:24:25 [main] ERROR com.example.demo.service.impl.AlbumServiceImpl - Album not found with id: 10
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching all albums
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Total albums fetched: 1
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to create album with name: Test
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching artist by email: unknown@test.com
-2026-03-03 21:24:25 [main] ERROR com.example.demo.service.impl.AlbumServiceImpl - User not found with email: unknown@test.com
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to delete album with id: 10
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.AlbumServiceImpl - Unauthorized delete attempt. Album id: 10, User id: 55
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching albums for current user
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Fetched 1 albums for artist id: 1
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to create album with name: Test Album
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching artist by email: artist@test.com
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Album created successfully. Album id: 10, Artist id: 1
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Uploading cover for album id: 10
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Cover uploaded successfully for album id: 10
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Uploading cover for album id: 10
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.AlbumServiceImpl - Unauthorized cover upload attempt. Album id: 10, User id: 99
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching album details for id: 10
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Album details retrieved successfully for id: 10
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Uploading cover for album id: 10
-2026-03-03 21:24:25 [main] ERROR com.example.demo.service.impl.AlbumServiceImpl - Album not found with id: 10
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to delete album with id: 10
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Detaching 0 songs from album id: 10
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Album deleted successfully. Album id: 10
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to create album with name: Test
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching artist by email: artist@test.com
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.AlbumServiceImpl - Duplicate album creation attempt. Album name: Test, Artist id: 1
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Updating album id: 10
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Album updated successfully. Album id: 10
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing image file. Original name: image.jpg
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.FileStorageServiceImpl - Image file stored successfully: f0406a5b-9f17-46e1-9bd6-8383c4ab17eb_image.jpg
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.FileStorageServiceImpl - File deletion attempt: audio/test.txt - Success: true
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Delete file skipped - Path is null or blank
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing audio file. Original name: song.mp3
-2026-03-03 21:24:25 [main] ERROR com.example.demo.service.impl.FileStorageServiceImpl - Failed to store audio file: song.mp3
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching album details for id: 10
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.AlbumServiceImpl - Album not found with id: 10
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching all albums
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Total albums fetched: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to create album with name: Test
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching artist by email: unknown@test.com
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.AlbumServiceImpl - User not found with email: unknown@test.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to delete album with id: 10
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AlbumServiceImpl - Unauthorized delete attempt. Album id: 10, User id: 55
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching albums for current user
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Fetched 1 albums for artist id: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to create album with name: Test Album
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching artist by email: artist@test.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Album created successfully. Album id: 10, Artist id: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Uploading cover for album id: 10
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Cover uploaded successfully for album id: 10
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Uploading cover for album id: 10
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AlbumServiceImpl - Unauthorized cover upload attempt. Album id: 10, User id: 99
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching album details for id: 10
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Album details retrieved successfully for id: 10
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Uploading cover for album id: 10
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.AlbumServiceImpl - Album not found with id: 10
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to delete album with id: 10
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Detaching 0 songs from album id: 10
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Album deleted successfully. Album id: 10
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Attempting to create album with name: Test
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Fetching artist by email: artist@test.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AlbumServiceImpl - Duplicate album creation attempt. Album name: Test, Artist id: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AlbumServiceImpl - Updating album id: 10
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AlbumServiceImpl - Album updated successfully. Album id: 10
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to add favorite. Song id: 1
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.FavoriteServiceImpl - Duplicate favorite attempt. User id: null, Song id: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Fetching favorites for current user
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.FavoriteServiceImpl - User not found while fetching favorites. Email: john@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to add favorite. Song id: 1
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.FavoriteServiceImpl - Song added to favorites successfully. User id: null, Song id: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Fetching favorites for current user
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.FavoriteServiceImpl - Fetched 1 favorite songs for user id: null
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to add favorite. Song id: 1
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.FavoriteServiceImpl - Song not found while adding favorite. Song id: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to remove favorite. Song id: 1
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.FavoriteServiceImpl - Song removed from favorites successfully. User id: null, Song id: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to add favorite. Song id: 1
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.FavoriteServiceImpl - User not found while adding favorite. Email: john@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to remove favorite. Song id: 1
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.FavoriteServiceImpl - Favorite not found for removal. User id: null, Song id: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing image file. Original name: image.jpg
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.FileStorageServiceImpl - Image file stored successfully: 6103cbf0-e99c-455c-907c-b18014b87534_image.jpg
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.FileStorageServiceImpl - File deletion attempt: audio/test.txt - Success: true
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Delete file skipped - Path is null or blank
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing audio file. Original name: song.mp3
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.FileStorageServiceImpl - Failed to store audio file: song.mp3
 java.io.IOException
 	at com.example.demo.service.impl.FileStorageServiceImpl.storeAudio(FileStorageServiceImpl.java:42)
 	at com.example.demo.serviceImplTest.FileStorageServiceImplTest.lambda$1(FileStorageServiceImplTest.java:69)
@@ -1726,14 +1713,14 @@ java.io.IOException
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:748)
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:443)
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:211)
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing audio file. Original name: song.mp3
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.FileStorageServiceImpl - Audio file stored successfully: 6cfa3597-902b-450e-bc84-9ecd23f880c1_song.mp3
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing audio file. Original name: null
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.FileStorageServiceImpl - Audio upload failed - File is empty
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing image file. Original name: null
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.FileStorageServiceImpl - Image upload failed - File is empty
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing image file. Original name: image.jpg
-2026-03-03 21:24:25 [main] ERROR com.example.demo.service.impl.FileStorageServiceImpl - Failed to store image file: image.jpg
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing audio file. Original name: song.mp3
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.FileStorageServiceImpl - Audio file stored successfully: cc2a069f-8d3b-4062-9531-b9ff72e86a9d_song.mp3
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing audio file. Original name: null
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.FileStorageServiceImpl - Audio upload failed - File is empty
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing image file. Original name: null
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.FileStorageServiceImpl - Image upload failed - File is empty
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.FileStorageServiceImpl - Storing image file. Original name: image.jpg
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.FileStorageServiceImpl - Failed to store image file: image.jpg
 java.io.IOException
 	at com.example.demo.service.impl.FileStorageServiceImpl.storeImage(FileStorageServiceImpl.java:76)
 	at com.example.demo.serviceImplTest.FileStorageServiceImplTest.lambda$3(FileStorageServiceImplTest.java:110)
@@ -1819,119 +1806,132 @@ java.io.IOException
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:748)
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:443)
 	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:211)
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching details for songId=10
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched song details for id=10
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Attempting to delete song id=10
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Song deleted successfully. id=10, title='Test Song'
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching songs for current artist
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched 1 songs for artist=artist@example.com
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching favorite stats for current artist
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched favorite stats for 1 songs
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Uploading new song: title='Test Song', albumId=null
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Song uploaded successfully. id=10, title='Test Song'
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching songs for albumId=100
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched 1 songs for albumId=100
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching all songs
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched 1 total songs
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Uploading cover for songId=10
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Cover uploaded successfully for songId=10
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching public songs
-2026-03-03 21:24:25 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched 1 public songs
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Registration failed - Weak password for email: test@example.com
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Registration failed - Underage user attempt: test@example.com
-2026-03-03 21:24:25 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Login attempt for email: test@example.com
-2026-03-03 21:24:25 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Login attempt on disabled account. Email: test@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Password reset attempt for email: test@example.com
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.AuthServiceImpl - Password reset successful. Account reactivated. Email: test@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Password reset attempt for email: test@example.com
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Password reset failed - User not found: test@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Registration failed - Email already registered: test@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Registration failed - Passwords do not match for email: test@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Login attempt for email: test@example.com
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.AuthServiceImpl - Login successful. Email: test@example.com, Role: USER
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Login attempt for email: test@example.com
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Login failed - Invalid credentials for email: test@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Login attempt for email: test@example.com
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Login failed - Incorrect password for email: test@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Password reset attempt for email: test@example.com
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Password reset failed - Invalid DOB for email: test@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.AuthServiceImpl - User registered successfully. Email: test@example.com, Role: USER
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching songs with keyword: Test
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 songs for keyword 'Test'
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching albums with keyword: Test
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 albums for keyword 'Test'
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching songs by release year: 2023
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 songs for year 2023
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching songs by genre: Pop
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 songs for genre 'Pop'
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Fetching all available genres
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Fetched 2 genres
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching songs by release year: 2022
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.SearchServiceImpl - No songs found for year 2022
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching artists with keyword: Test
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 artists for keyword 'Test'
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Fetching recent history for user: test@mail.com
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.HistoryServiceImpl - User not found while fetching recent history: test@mail.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Fetching full history for user: test@mail.com
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Full history fetched for user: test@mail.com - Records: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Calculating listening time for user: test@mail.com
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Total listening time for user test@mail.com: 120 seconds
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Fetching most played songs for user: test@mail.com
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Most played songs fetched for user: test@mail.com - Records: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Clearing listening history for user: test@mail.com
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Listening history cleared successfully for user: test@mail.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Fetching recent history for user: test@mail.com
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Recent history fetched for user: test@mail.com - Records: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Fetching profile for current user
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.UserServiceImpl - Profile fetched successfully for email=user@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Updating profile for current user
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.UserServiceImpl - Profile updated successfully for email=user@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Uploading profile image for current user
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.UserServiceImpl - Profile image uploaded successfully for email=user@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Attempting to deactivate current user account
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.UserServiceImpl - User not found while deactivating account. email=missing@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Attempting to deactivate current user account
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.UserServiceImpl - User account deactivated successfully. email=user@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Fetching dashboard statistics for current user
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.UserServiceImpl - Dashboard stats fetched for email=user@example.com | favorites=2, playlists=3, recentPlays=5
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Fetching artist profile by id: 10
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Artist profile retrieved successfully. Profile id: 10
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Fetching current artist profile
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Artist profile retrieved successfully. Profile id: 10
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Creating artist profile
-2026-03-03 21:24:26 [main] ERROR com.example.demo.service.impl.ArtistServiceImpl - User not found while creating artist profile. Email: artist@test.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Updating artist profile
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Artist profile updated successfully. Profile id: 10
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Uploading profile image for profile id: 10
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Profile image uploaded successfully. Profile id: 10
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Creating artist profile
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.ArtistServiceImpl - Artist profile already exists for user id: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Uploading profile image for profile id: 10
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.ArtistServiceImpl - Unauthorized profile image upload attempt. Profile id: 10, User id: 99
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Fetching artist profile by id: 10
-2026-03-03 21:24:26 [main] ERROR com.example.demo.service.impl.ArtistServiceImpl - Artist profile not found with id: 10
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Updating artist profile
-2026-03-03 21:24:26 [main] ERROR com.example.demo.service.impl.ArtistServiceImpl - Artist profile not found for user id: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Creating artist profile
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Artist profile created successfully. Profile id: null, User id: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to add favorite. Song id: 1
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.FavoriteServiceImpl - Duplicate favorite attempt. User id: null, Song id: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Fetching favorites for current user
-2026-03-03 21:24:26 [main] ERROR com.example.demo.service.impl.FavoriteServiceImpl - User not found while fetching favorites. Email: john@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to add favorite. Song id: 1
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.FavoriteServiceImpl - Song added to favorites successfully. User id: null, Song id: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Fetching favorites for current user
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.FavoriteServiceImpl - Fetched 1 favorite songs for user id: null
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to add favorite. Song id: 1
-2026-03-03 21:24:26 [main] ERROR com.example.demo.service.impl.FavoriteServiceImpl - Song not found while adding favorite. Song id: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to remove favorite. Song id: 1
-2026-03-03 21:24:26 [main] INFO  com.example.demo.service.impl.FavoriteServiceImpl - Song removed from favorites successfully. User id: null, Song id: 1
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to add favorite. Song id: 1
-2026-03-03 21:24:26 [main] ERROR com.example.demo.service.impl.FavoriteServiceImpl - User not found while adding favorite. Email: john@example.com
-2026-03-03 21:24:26 [main] DEBUG com.example.demo.service.impl.FavoriteServiceImpl - Attempting to remove favorite. Song id: 1
-2026-03-03 21:24:26 [main] WARN  com.example.demo.service.impl.FavoriteServiceImpl - Favorite not found for removal. User id: null, Song id: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching listener insights
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AnalyticsServiceImpl - Listener insights generated for artist id: 1. Unique listeners: 25
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching play chart data
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AnalyticsServiceImpl - Play chart generated for artist id: 1. Total songs: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching artist analytics
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.AnalyticsServiceImpl - Artist not found with email: unknown@test.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching daily trends
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.AnalyticsServiceImpl - Artist not found with email: unknown@test.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching artist analytics
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AnalyticsServiceImpl - Artist analytics generated. Artist id: 1, Songs: 5, Albums: 2, Plays: 100, Favorites: 20
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching daily trends
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AnalyticsServiceImpl - Daily trends generated for artist id: 1. Total days: 2
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AnalyticsServiceImpl - Fetching play chart data
+2026-03-03 22:23:04 [main] ERROR com.example.demo.service.impl.AnalyticsServiceImpl - Artist not found with email: unknown@test.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Fetching recent history for user: test@mail.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.HistoryServiceImpl - User not found while fetching recent history: test@mail.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Fetching full history for user: test@mail.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Full history fetched for user: test@mail.com - Records: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Calculating listening time for user: test@mail.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Total listening time for user test@mail.com: 120 seconds
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Fetching most played songs for user: test@mail.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Most played songs fetched for user: test@mail.com - Records: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Clearing listening history for user: test@mail.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Listening history cleared successfully for user: test@mail.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.HistoryServiceImpl - Fetching recent history for user: test@mail.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.HistoryServiceImpl - Recent history fetched for user: test@mail.com - Records: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - User test@mail.com requested to play song with id: 1
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.PlayerServiceImpl - User not found while playing song. Email: test@mail.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - User test@mail.com requested to play song with id: 1
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.PlayerServiceImpl - Play count incremented for song 'Test Song' (ID: 1) by user test@mail.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.PlayerServiceImpl - Play history saved for user test@mail.com and song 'Test Song'
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - User test@mail.com requested to play song with id: 1
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.PlayerServiceImpl - Play history saved for user test@mail.com and song 'Test Song'
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - Fetching trending songs with limit: 1
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.PlayerServiceImpl - Trending songs fetched. Total returned: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.PlayerServiceImpl - User test@mail.com requested to play song with id: 1
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.PlayerServiceImpl - Song not found. Song ID: 1
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Registration failed - Weak password for email: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Registration failed - Underage user attempt: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Login attempt for email: test@example.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Login attempt on disabled account. Email: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Password reset attempt for email: test@example.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AuthServiceImpl - Password reset successful. Account reactivated. Email: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Password reset attempt for email: test@example.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Password reset failed - User not found: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Registration failed - Email already registered: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Registration failed - Passwords do not match for email: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Login attempt for email: test@example.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AuthServiceImpl - Login successful. Email: test@example.com, Role: USER
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Login attempt for email: test@example.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Login failed - Invalid credentials for email: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Login attempt for email: test@example.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Login failed - Incorrect password for email: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Password reset attempt for email: test@example.com
+2026-03-03 22:23:04 [main] WARN  com.example.demo.service.impl.AuthServiceImpl - Password reset failed - Invalid DOB for email: test@example.com
+2026-03-03 22:23:04 [main] DEBUG com.example.demo.service.impl.AuthServiceImpl - Registration attempt for email: test@example.com
+2026-03-03 22:23:04 [main] INFO  com.example.demo.service.impl.AuthServiceImpl - User registered successfully. Email: test@example.com, Role: USER
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.PlaylistServiceImpl - Follow playlist request. User=test@mail.com, PlaylistId=10
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.PlaylistServiceImpl - User test@mail.com followed playlist 'Test Playlist'
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.PlaylistServiceImpl - Follow playlist request. User=test@mail.com, PlaylistId=10
+2026-03-03 22:23:05 [main] WARN  com.example.demo.service.impl.PlaylistServiceImpl - User tried to follow own playlist. User=test@mail.com
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching details for songId=10
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched song details for id=10
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Attempting to delete song id=10
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Song deleted successfully. id=10, title='Test Song'
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching songs for current artist
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched 1 songs for artist=artist@example.com
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching favorite stats for current artist
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched favorite stats for 1 songs
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Uploading new song: title='Test Song', albumId=null
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Song uploaded successfully. id=10, title='Test Song'
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching songs for albumId=100
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched 1 songs for albumId=100
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching all songs
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched 1 total songs
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Uploading cover for songId=10
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Cover uploaded successfully for songId=10
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SongServiceImpl - Fetching public songs
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SongServiceImpl - Fetched 1 public songs
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching songs with keyword: Test
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 songs for keyword 'Test'
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching albums with keyword: Test
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 albums for keyword 'Test'
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching songs by release year: 2023
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 songs for year 2023
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching songs by genre: Pop
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 songs for genre 'Pop'
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Fetching all available genres
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Fetched 2 genres
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching songs by release year: 2022
+2026-03-03 22:23:05 [main] WARN  com.example.demo.service.impl.SearchServiceImpl - No songs found for year 2022
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.SearchServiceImpl - Searching artists with keyword: Test
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.SearchServiceImpl - Found 1 artists for keyword 'Test'
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Fetching profile for current user
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.UserServiceImpl - Profile fetched successfully for email=user@example.com
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Updating profile for current user
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.UserServiceImpl - Profile updated successfully for email=user@example.com
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Uploading profile image for current user
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.UserServiceImpl - Profile image uploaded successfully for email=user@example.com
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Attempting to deactivate current user account
+2026-03-03 22:23:05 [main] WARN  com.example.demo.service.impl.UserServiceImpl - User not found while deactivating account. email=missing@example.com
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Attempting to deactivate current user account
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.UserServiceImpl - User account deactivated successfully. email=user@example.com
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.UserServiceImpl - Fetching dashboard statistics for current user
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.UserServiceImpl - Dashboard stats fetched for email=user@example.com | favorites=2, playlists=3, recentPlays=5
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Fetching artist profile by id: 10
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Artist profile retrieved successfully. Profile id: 10
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Fetching current artist profile
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Artist profile retrieved successfully. Profile id: 10
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Creating artist profile
+2026-03-03 22:23:05 [main] ERROR com.example.demo.service.impl.ArtistServiceImpl - User not found while creating artist profile. Email: artist@test.com
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Updating artist profile
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Artist profile updated successfully. Profile id: 10
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Uploading profile image for profile id: 10
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Profile image uploaded successfully. Profile id: 10
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Creating artist profile
+2026-03-03 22:23:05 [main] WARN  com.example.demo.service.impl.ArtistServiceImpl - Artist profile already exists for user id: 1
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Uploading profile image for profile id: 10
+2026-03-03 22:23:05 [main] WARN  com.example.demo.service.impl.ArtistServiceImpl - Unauthorized profile image upload attempt. Profile id: 10, User id: 99
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Fetching artist profile by id: 10
+2026-03-03 22:23:05 [main] ERROR com.example.demo.service.impl.ArtistServiceImpl - Artist profile not found with id: 10
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Updating artist profile
+2026-03-03 22:23:05 [main] ERROR com.example.demo.service.impl.ArtistServiceImpl - Artist profile not found for user id: 1
+2026-03-03 22:23:05 [main] DEBUG com.example.demo.service.impl.ArtistServiceImpl - Creating artist profile
+2026-03-03 22:23:05 [main] INFO  com.example.demo.service.impl.ArtistServiceImpl - Artist profile created successfully. Profile id: null, User id: 1

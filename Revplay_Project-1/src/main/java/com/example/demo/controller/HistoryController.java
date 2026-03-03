@@ -1,15 +1,9 @@
 package com.example.demo.controller;
 
-<<<<<<< HEAD
-import com.example.demo.dto.music.SongDTO;
-import com.example.demo.service.HistoryService;
-
-=======
 import com.example.demo.dto.music.HistoryDTO;
 import com.example.demo.dto.music.ListeningTimeDTO;
 import com.example.demo.dto.music.MostPlayedDTO;
 import com.example.demo.service.HistoryService;
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,22 +18,6 @@ public class HistoryController {
         this.historyService = historyService;
     }
 
-<<<<<<< HEAD
-    @PostMapping("/{songId}")
-    public String recordPlay(@PathVariable Long songId) {
-        historyService.recordPlay(songId);
-        return "Play recorded";
-    }
-
-    @GetMapping
-    public List<SongDTO> myHistory() {
-        return historyService.getMyHistory();
-    }
-    
-    @GetMapping("/recent")
-    public List<SongDTO> recentlyPlayed() {
-        return historyService.getRecentlyPlayed();
-=======
     // last 50 songs
     @GetMapping("/recent")
     public List<HistoryDTO> getRecentHistory() {
@@ -67,6 +45,5 @@ public class HistoryController {
     @GetMapping("/most-played")
     public List<MostPlayedDTO> mostPlayed() {
         return historyService.getMostPlayed();
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     }
 }

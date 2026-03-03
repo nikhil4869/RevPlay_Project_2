@@ -137,18 +137,12 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("Invalid date of birth");
         }
 
-<<<<<<< HEAD
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-
-        // 🔥 Reactivate account if disabled
-=======
         if (!PasswordValidator.isStrong(request.getNewPassword())) {
             logger.warn("Password reset failed - Weak password for email: {}", request.getEmail());
             throw new BadRequestException("Password not strong enough");
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
         user.setEnabled(true);
 
         userRepository.save(user);
@@ -157,9 +151,6 @@ public class AuthServiceImpl implements AuthService {
                 request.getEmail());
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 
 }

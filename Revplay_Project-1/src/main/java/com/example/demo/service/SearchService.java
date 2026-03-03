@@ -1,18 +1,5 @@
 package com.example.demo.service;
 
-<<<<<<< HEAD
-import com.example.demo.dto.music.SongDTO;
-import java.util.List;
-
-public interface SearchService {
-
-    List<SongDTO> searchByTitle(String title);
-
-    List<SongDTO> searchByArtist(String artistName);
-
-    List<SongDTO> searchByGenre(String genre);
-}
-=======
 import java.util.List;
 import com.example.demo.dto.music.SongDTO;
 import com.example.demo.entity.Song;
@@ -35,4 +22,3 @@ public interface SearchService {
 
 
 }
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08

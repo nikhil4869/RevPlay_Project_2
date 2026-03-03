@@ -25,18 +25,11 @@ public class SongController {
             @RequestParam String duration,
             @RequestParam MultipartFile file,
             @RequestParam(required = false) Long albumId,
-<<<<<<< HEAD
-            @RequestParam(required = false) Integer trackNumber) {
-
-        return ResponseEntity.ok(
-                songService.uploadSong(title, genre, duration, file, albumId, trackNumber));
-=======
             @RequestParam(required = false) Integer trackNumber,
             @RequestParam Integer releaseYear){
 
         return ResponseEntity.ok(
                 songService.uploadSong(title, genre, duration, file, albumId, trackNumber,releaseYear));
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     }
 
     // get songs uploaded by artist
@@ -44,13 +37,8 @@ public class SongController {
     public ResponseEntity<List<SongDTO>> getMySongs() {
         return ResponseEntity.ok(songService.getMySongs());
     }
-<<<<<<< HEAD
-
-    // Song cover
-=======
     
     //Song cover
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     @PostMapping("/{id}/cover")
     public ResponseEntity<SongDTO> uploadCover(
             @PathVariable Long id,
@@ -58,13 +46,8 @@ public class SongController {
 
         return ResponseEntity.ok(songService.uploadCover(id, image));
     }
-<<<<<<< HEAD
-
-    // add songs to album
-=======
     
     //add songs to album
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     @PutMapping("/{songId}/album/{albumId}")
     public String addSongToAlbum(@PathVariable Long songId,
                                  @PathVariable Long albumId,
@@ -73,34 +56,21 @@ public class SongController {
         songService.addSongToAlbum(songId, albumId, trackNumber);
         return "Song added to album";
     }
-<<<<<<< HEAD
-
-    // Get album by Id
-=======
     
     //Get album by Id
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     @GetMapping("/album/{albumId}")
     public List<SongDTO> getAlbumSongs(@PathVariable Long albumId) {
         return songService.getAlbumSongs(albumId);
     }
 
-<<<<<<< HEAD
-    // removing song from album not deleting song
-=======
     //removing song from album not deleting song
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     @PutMapping("/{songId}/remove-album")
     public String removeFromAlbum(@PathVariable Long songId) {
         songService.removeFromAlbum(songId);
         return "Song removed from album";
     }
 
-<<<<<<< HEAD
-    // re-ordering track numbers in album
-=======
     //re-ordering track numbers in album
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     @PutMapping("/{songId}/reorder")
     public String reorderTrack(@PathVariable Long songId,
                                @RequestParam Integer newTrackNumber) {
@@ -108,25 +78,12 @@ public class SongController {
         songService.reorderTrack(songId, newTrackNumber);
         return "Track reordered successfully";
     }
-<<<<<<< HEAD
-
-=======
     
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     @DeleteMapping("/{songId}")
     public String deleteSong(@PathVariable Long songId) {
         songService.deleteSong(songId);
         return "Song deleted permanently";
     }
-<<<<<<< HEAD
-    
- // get all songs (for listener)
-    @GetMapping
-    public ResponseEntity<List<SongDTO>> getAllSongs() {
-        return ResponseEntity.ok(songService.getAllSongs());
-    }
-}
-=======
 
     //  browse all songs
     @GetMapping("/all")
@@ -148,4 +105,3 @@ public class SongController {
 
 
 }
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08

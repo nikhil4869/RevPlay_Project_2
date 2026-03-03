@@ -1,22 +1,5 @@
 package com.example.demo.service.impl;
 
-<<<<<<< HEAD
-import com.example.demo.dto.music.SongDTO;
-import com.example.demo.dto.playlist.PlaylistDTO;
-import com.example.demo.entity.*;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.exception.UnauthorizedException;
-import com.example.demo.repository.*;
-import com.example.demo.service.PlaylistService;
-import com.example.demo.util.SecurityUtil;
-
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-=======
 import com.example.demo.dto.playlist.PlaylistDTO;
 import com.example.demo.entity.Playlist;
 import com.example.demo.entity.User;
@@ -37,54 +20,12 @@ import com.example.demo.repository.SongRepository;
 import com.example.demo.dto.music.SongDTO;
 import com.example.demo.entity.FollowedPlaylist;
 import com.example.demo.repository.FollowedPlaylistRepository;
-<<<<<<< HEAD
-
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
-=======
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
->>>>>>> d4f4593 (Initial commit of RevPlay project)
 @Service
 public class PlaylistServiceImpl implements PlaylistService {
 
     private final PlaylistRepository playlistRepository;
-<<<<<<< HEAD
-    private final PlaylistSongRepository playlistSongRepository;
-    private final SongRepository songRepository;
-    private final UserRepository userRepository;
-
-    public PlaylistServiceImpl(PlaylistRepository playlistRepository,
-                               PlaylistSongRepository playlistSongRepository,
-                               SongRepository songRepository,
-                               UserRepository userRepository) {
-        this.playlistRepository = playlistRepository;
-        this.playlistSongRepository = playlistSongRepository;
-        this.songRepository = songRepository;
-        this.userRepository = userRepository;
-    }
-
-    // ================= CREATE PLAYLIST =================
-
-    @Override
-    public PlaylistDTO createPlaylist(String name) {
-
-        User listener = getCurrentUser();
-
-        Playlist playlist = new Playlist();
-        playlist.setName(name);
-        playlist.setListener(listener);
-        playlist.setPublic(false); // default private
-
-        return mapBasicDTO(playlistRepository.save(playlist));
-    }
-
-    // ================= ADD SONG =================
-
-    @Override
-    public void addSongToPlaylist(Long playlistId, Long songId) {
-
-        Playlist playlist = getOwnedPlaylist(playlistId);
-=======
     private final UserRepository userRepository;
     private final PlaylistSongRepository playlistSongRepository;
     private final SongRepository songRepository;
@@ -208,7 +149,6 @@ public class PlaylistServiceImpl implements PlaylistService {
                     email, playlistId);
             throw new UnauthorizedException("Not your playlist");
         }
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 
         Song song = songRepository.findById(songId)
                 .orElseThrow(() -> {
@@ -216,43 +156,15 @@ public class PlaylistServiceImpl implements PlaylistService {
                     return new ResourceNotFoundException("Song not found");
                 });
 
-<<<<<<< HEAD
-        if (!song.isPublic()) {
-            throw new BadRequestException("Cannot add private song to playlist");
-        }
-
-        if (playlistSongRepository.existsByPlaylistAndSong(playlist, song)) {
-=======
         if (playlistSongRepository.findByPlaylistAndSongId(playlist, songId).isPresent()) {
-<<<<<<< HEAD
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
-=======
             logger.warn("Song already in playlist. PlaylistId={}, SongId={}",
                     playlistId, songId);
->>>>>>> d4f4593 (Initial commit of RevPlay project)
             throw new BadRequestException("Song already in playlist");
         }
 
         PlaylistSong ps = new PlaylistSong();
         ps.setPlaylist(playlist);
         ps.setSong(song);
-<<<<<<< HEAD
-
-        playlistSongRepository.save(ps);
-    }
-
-    // ================= REMOVE SONG =================
-
-    @Override
-    public void removeSongFromPlaylist(Long playlistId, Long songId) {
-
-        Playlist playlist = getOwnedPlaylist(playlistId);
-
-        PlaylistSong ps = playlistSongRepository.findByPlaylist(playlist)
-                .stream()
-                .filter(p -> p.getSong().getId().equals(songId))
-                .findFirst()
-=======
         ps.setPosition(
                 playlistSongRepository
                         .findByPlaylistOrderByPositionAsc(playlist)
@@ -285,115 +197,23 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         PlaylistSong ps = playlistSongRepository
                 .findByPlaylistAndSongId(playlist, songId)
-<<<<<<< HEAD
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
-                .orElseThrow(() -> new ResourceNotFoundException("Song not in playlist"));
-=======
                 .orElseThrow(() -> {
                     logger.warn("Song not found in playlist. PlaylistId={}, SongId={}",
                             playlistId, songId);
                     return new ResourceNotFoundException("Song not in playlist");
                 });
->>>>>>> d4f4593 (Initial commit of RevPlay project)
 
         playlistSongRepository.delete(ps);
 
         logger.info("Song removed from playlist '{}' by user {}",
                 playlist.getName(), email);
     }
-<<<<<<< HEAD
-
-    // ================= MY PLAYLISTS =================
-
-    @Override
-    public List<PlaylistDTO> getMyPlaylists() {
-
-        User listener = getCurrentUser();
-
-        return playlistRepository.findByListener(listener)
-                .stream()
-                .map(this::mapBasicDTO)
-                .collect(Collectors.toList());
-    }
-
-    // ================= PLAYLIST WITH SONGS =================
-
-    @Override
-    public PlaylistDTO getPlaylistWithSongs(Long playlistId) {
-=======
     
     @Override
     public List<SongDTO> getPlaylistSongs(Long playlistId) {
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 
         logger.debug("Fetching songs for playlist id={}", playlistId);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        User currentUser = getCurrentUser();
-
-        // 🔐 Security Check
-        if (!playlist.isPublic() &&
-            !playlist.getListener().getId().equals(currentUser.getId())) {
-
-            throw new UnauthorizedException("You cannot access this private playlist");
-        }
-
-        List<PlaylistSong> playlistSongs =
-                playlistSongRepository.findByPlaylist(playlist);
-
-        PlaylistDTO dto = mapBasicDTO(playlist);
-
-        dto.setSongs(
-                playlistSongs.stream()
-                        .map(ps -> mapSong(ps.getSong()))
-                        .collect(Collectors.toList())
-        );
-
-        dto.setTotalSongs(playlistSongs.size());
-
-        return dto;
-    }
-
-    // ================= CHANGE VISIBILITY =================
-
-    @Override
-    public PlaylistDTO changeVisibility(Long playlistId, boolean isPublic) {
-
-        Playlist playlist = getOwnedPlaylist(playlistId);
-
-        playlist.setPublic(isPublic);
-
-        return mapBasicDTO(playlistRepository.save(playlist));
-    }
-
-    // ================= PUBLIC PLAYLISTS =================
-
-    @Override
-    public List<PlaylistDTO> getPublicPlaylists() {
-
-        return playlistRepository.findByIsPublicTrue()
-                .stream()
-                .map(this::mapBasicDTO)
-                .collect(Collectors.toList());
-    }
-
-    // ================= HELPER METHODS =================
-
-    private User getCurrentUser() {
-
-        String email = SecurityUtil.getCurrentUserEmail();
-
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
-    private Playlist getOwnedPlaylist(Long playlistId) {
-
-        User listener = getCurrentUser();
-=======
-        return playlistSongRepository
-=======
         Playlist playlist = playlistRepository.findById(playlistId)
                 .orElseThrow(() -> {
                     logger.warn("Playlist not found while fetching songs. id={}", playlistId);
@@ -405,7 +225,6 @@ public class PlaylistServiceImpl implements PlaylistService {
                 playlist.getUser().getEmail());
 
         List<SongDTO> songs = playlistSongRepository
->>>>>>> d4f4593 (Initial commit of RevPlay project)
                 .findByPlaylistOrderByPositionAsc(playlist)
                 .stream()
                 .map(ps -> new SongDTO(
@@ -434,15 +253,10 @@ public class PlaylistServiceImpl implements PlaylistService {
                 email, playlistId);
 
         User user = userRepository.findByEmail(email)
-<<<<<<< HEAD
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
-=======
                 .orElseThrow(() -> {
                     logger.warn("User not found. Email={}", email);
                     return new ResourceNotFoundException("User not found");
                 });
->>>>>>> d4f4593 (Initial commit of RevPlay project)
 
         Playlist playlist = playlistRepository.findById(playlistId)
                 .orElseThrow(() -> {
@@ -450,38 +264,6 @@ public class PlaylistServiceImpl implements PlaylistService {
                     return new ResourceNotFoundException("Playlist not found");
                 });
 
-<<<<<<< HEAD
-        if (!playlist.getListener().getId().equals(listener.getId())) {
-            throw new UnauthorizedException("Unauthorized access");
-        }
-
-        return playlist;
-    }
-
-    private PlaylistDTO mapBasicDTO(Playlist playlist) {
-
-        long count = playlistSongRepository.countByPlaylist(playlist);
-
-        PlaylistDTO dto = new PlaylistDTO();
-        dto.setId(playlist.getId());
-        dto.setName(playlist.getName());
-        dto.setPublic(playlist.isPublic());
-        dto.setTotalSongs((int) count);
-
-        return dto;
-    }
-
-    private SongDTO mapSong(Song song) {
-
-        return new SongDTO(
-                song.getId(),
-                song.getTitle(),
-                song.getGenre(),
-                song.getDuration(),
-                song.getAudioPath(),
-                song.getCoverImage(),
-                song.getArtist().getName()
-=======
         if (!playlist.isPublic()) {
             logger.warn("Attempt to follow private playlist. User={}, PlaylistId={}",
                     email, playlistId);
@@ -568,7 +350,6 @@ public class PlaylistServiceImpl implements PlaylistService {
                 playlist.getDescription(),
                 playlist.isPublic(),
                 playlist.getUser().getName()
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
         );
     }
 }

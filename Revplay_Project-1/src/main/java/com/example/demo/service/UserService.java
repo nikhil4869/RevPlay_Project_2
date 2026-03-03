@@ -10,8 +10,6 @@ public interface UserService {
 
     void deactivateMyAccount();
 
-<<<<<<< HEAD
-=======
     UserProfileDTO getMyProfile();
 
     UserProfileDTO updateProfile(UserProfileDTO dto);
@@ -19,5 +17,4 @@ public interface UserService {
     UserProfileDTO uploadProfileImage(MultipartFile image);
     
     UserDashboardDTO getDashboardStats();
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 }

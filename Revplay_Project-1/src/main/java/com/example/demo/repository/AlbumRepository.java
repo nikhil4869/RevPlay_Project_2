@@ -9,8 +9,6 @@ import java.util.List;
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     List<Album> findByArtist(User artist);
-<<<<<<< HEAD
-=======
     
     List<Album> findAll();
     
@@ -18,11 +16,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     
     boolean existsByNameIgnoreCaseAndArtist(String name, User artist);
 
-<<<<<<< HEAD
-
->>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
-=======
     long countByArtist(User artist);
->>>>>>> d4f4593 (Initial commit of RevPlay project)
 
 }
