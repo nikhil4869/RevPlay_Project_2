@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>RevPlay - Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="login-container">
+    <h1>RevPlay</h1>
+    <div class="tagline">Join the Beat 🎵</div>
+
+    <p th:if="${error}" th:text="${error}" class="error"></p>
+    <p th:if="${success}" th:text="${success}" style="color: lightgreen;"></p>
+
+    <form th:action="@{/register}" method="post">
+
+        <input type="text" name="name" placeholder="Full Name" required>
+
+        <input type="email" name="email" placeholder="Email" required>
+
+        <input type="date" name="dateOfBirth" required>
+
+		<div style="position: relative;">
+		    <input type="password" id="password" name="password" placeholder="Password" required>
+		    <span onclick="togglePassword('password')" 
+		          style="position: absolute; right: 10px; top: 12px; cursor: pointer; color: gold;">
+		        👁
+		    </span>
+		</div>
+
+		<div style="position: relative;">
+		    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+		    <span onclick="togglePassword('confirmPassword')" 
+		          style="position: absolute; right: 10px; top: 12px; cursor: pointer; color: gold;">
+		        👁
+		    </span>
+		</div>
+
+        <select name="role" required style="width:100%; padding:12px; margin-bottom:15px; border-radius:6px; background:#2a2a2a; color:white; border:none;">
+            <option value="">Select Role</option>
+            <option value="USER">User</option>
+            <option value="ARTIST">Artist</option>
+        </select>
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <div class="links">
+        <p>Already have an account? <a th:href="@{/login}">Login</a></p>
+    </div>
+</div>
+
+<script>
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+
+        if (field.type === "password") {
+            field.type = "text";
+        } else {
+            field.type = "password";
+        }
+    }
+</script>
+</body>
+</html>

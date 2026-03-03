@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 .metadata/
 *.log
 *.class
 target/
-=======
-/.metadata/
->>>>>>> d4f4593 (Initial commit of RevPlay project)
+/uploads/

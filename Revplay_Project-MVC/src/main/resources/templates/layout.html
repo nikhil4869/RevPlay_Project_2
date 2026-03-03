@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>RevPlay</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+
+<body th:fragment="layout" class="app-body">
+<div class="app-container">
+
+    <!-- Top Search Bar -->
+    <div class="top-bar">
+        <input type="text"
+               placeholder="What do you want to play?"
+               class="search-input">
+    </div>
+
+    <!-- Main Content -->
+	<div class="main-layout" style="display: flex; flex: 1;">
+	    <div th:replace="~{fragments/sidebar :: userSidebar(${activePage})}"></div>
+
+	    <div class="page-content" style="flex: 1; overflow-y: auto;">
+	        <div th:insert="~{::content}"></div>
+	    </div>
+	</div>
+
+    <!-- Global Player -->
+    <div id="musicPlayer" class="music-player">
+
+        <!-- LEFT -->
+        <div class="player-left">
+            <img id="songCover" src="" class="player-cover">
+            <div>
+                <div id="songTitle" class="player-title">
+                    No song playing
+                </div>
+                <div id="songArtist" class="player-artist"></div>
+            </div>
+        </div>
+
+        <!-- CENTER -->
+        <div class="player-center">
+            <button onclick="togglePlay()" class="play-control">
+                ▶
+            </button>
+
+            <input type="range" id="progressBar" class="progress-bar" value="0">
+        </div>
+
+        <!-- RIGHT -->
+        <div class="player-right">
+            🔊
+        </div>
+
+        <audio id="audioPlayer"></audio>
+    </div>
+
+</div>
+
+<script>
+    const audio = document.getElementById("audioPlayer");
+    const progressBar = document.getElementById("progressBar");
+
+	function playSong(title, artist, url, cover) {
+	    const btn = document.querySelector(".play-control");
+	    const audio = document.getElementById("audioPlayer");
+
+	    document.getElementById("songTitle").innerText = title;
+	    document.getElementById("songArtist").innerText = artist;
+	    document.getElementById("songCover").src = cover;
+
+	    audio.src = url;
+	    audio.load(); 
+	    
+	    audio.play().then(() => {
+	        btn.innerText = "⏸";
+	    }).catch(error => {
+	        console.error("Playback failed:", error);
+	    });
+	}
+
+	function togglePlay() {
+	    const btn = document.querySelector(".play-control");
+
+	    if (audio.paused) {
+	        audio.play();
+	        btn.innerText = "⏸";
+	    } else {
+	        audio.pause();
+	        btn.innerText = "▶";
+	    }
+	}
+
+    audio.ontimeupdate = function () {
+        if (audio.duration) {
+            progressBar.value = (audio.currentTime / audio.duration) * 100;
+        }
+    };
+
+    progressBar.oninput = function () {
+        if (audio.duration) {
+            audio.currentTime = (progressBar.value / 100) * audio.duration;
+        }
+    };
+	
+	audio.onended = function () {
+	    const btn = document.querySelector(".play-control");
+	    btn.innerText = "▶";
+	};
+	
+	document.addEventListener("click", function(e) {
+
+	    if (e.target.classList.contains("play-btn")) {
+
+	        const title = e.target.getAttribute("data-title");
+	        const artist = e.target.getAttribute("data-artist");
+	        const url = e.target.getAttribute("data-url");
+	        const cover = e.target.getAttribute("data-cover");
+
+	        playSong(title, artist, url, cover);
+	    }
+
+	});
+</script>
+
+</body>
+</html>
