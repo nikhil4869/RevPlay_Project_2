@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Song To Album</title>
+</head>
+<body style="background:#111; color:white; font-family:sans-serif;">
+
+<div style="padding:40px;">
+
+    <h2>Select Song To Add 🎵</h2>
+
+    <div th:if="${#lists.isEmpty(songs)}">
+        <p>No songs available.</p>
+    </div>
+
+    <div th:each="song : ${songs}"
+         style="background:#1c1c1c; padding:15px; margin-bottom:10px; border-radius:8px;">
+
+        <form th:action="@{'/artist/albums/' + ${albumId} + '/assign-song'}"
+              method="post">
+
+            <input type="hidden" name="songId"
+                   th:value="${song.id}" />
+
+            <b th:text="${song.title}"></b>
+            <span th:text="${song.duration}"
+                  style="color:gray;"></span>
+
+            <br><br>
+
+            <label>Track Number:</label>
+            <input type="number" name="trackNumber"
+                   required style="width:60px;">
+
+            <button type="submit"
+                    style="background:gold; border:none; padding:5px 10px;">
+                Add
+            </button>
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

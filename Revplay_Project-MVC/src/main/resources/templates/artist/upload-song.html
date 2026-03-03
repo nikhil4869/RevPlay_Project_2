@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Upload Song</title>
+
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 80px auto;
+            background: #181818;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: gold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            border: none;
+            background: #2a2a2a;
+            color: white;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: 2px solid gold;
+        }
+
+        .upload-btn {
+            width: 100%;
+            padding: 12px;
+            background: gold;
+            color: black;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #ffcc00;
+            transform: scale(1.03);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: gray;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        .file-label {
+            margin-bottom: 8px;
+            display: block;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .message-success {
+            background: rgba(0, 255, 0, 0.1);
+            color: #00ff88;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .message-error {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff4d4d;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🎵 Upload New Song</h2>
+
+    <!-- Success Message -->
+    <div th:if="${successMessage}" 
+         th:text="${successMessage}"
+         class="message-success">
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${errorMessage}" 
+         th:text="${errorMessage}"
+         class="message-error">
+    </div>
+
+    <form th:action="@{/artist/songs/upload}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <input type="text" 
+               name="title" 
+               placeholder="Song Title" 
+               required>
+
+        <input type="text" 
+               name="genre" 
+               placeholder="Genre (Pop, Rock, etc)" 
+               required>
+
+        <input type="number" 
+               name="releaseYear" 
+               placeholder="Release Year" 
+               required>
+
+        <input type="text" 
+               name="duration" 
+               placeholder="Duration (4:20)" 
+               required>
+
+        <label class="file-label">Select Audio File</label>
+        <input type="file" 
+               name="file" 
+               accept="audio/*" 
+               required>
+
+        <button type="submit" class="upload-btn">
+            Upload Song
+        </button>
+
+    </form>
+
+    <a th:href="@{/artist/songs}" class="back-link">
+        ← Back To My Songs
+    </a>
+
+</div>
+
+</body>
+</html>

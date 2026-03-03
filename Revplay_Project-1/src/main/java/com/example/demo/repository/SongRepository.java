@@ -45,7 +45,12 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     boolean existsByAlbumAndId(Album album, Long songId);
 
     boolean existsByAlbumAndTrackNumber(Album album, Integer trackNumber);
+<<<<<<< HEAD
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
+=======
+    
+    List<Song> findByAlbum(Album album);
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
 
 import java.util.List;
 

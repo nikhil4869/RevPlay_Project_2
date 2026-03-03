@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Profile</title>
+
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            background: #181818;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.08);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: gold;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 8px;
+            border: none;
+            background: #2a2a2a;
+            color: white;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: 2px solid gold;
+        }
+
+        .update-btn {
+            width: 100%;
+            padding: 12px;
+            background: gold;
+            color: black;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .update-btn:hover {
+            background: #ffcc00;
+            transform: scale(1.03);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: gray;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🎤 Edit Artist Profile</h2>
+
+    <form th:action="@{/artist/profile/update}"
+          method="post"
+          enctype="multipart/form-data"
+          th:object="${profile}">
+
+        <!-- Hidden ID -->
+        <input type="hidden" th:field="*{id}" />
+
+        <label>Artist Name</label>
+        <input type="text" th:field="*{artistName}" required>
+
+        <label>Genre</label>
+        <input type="text" th:field="*{genre}" required>
+
+        <label>Bio</label>
+        <textarea rows="4" th:field="*{bio}"></textarea>
+
+        <label>Instagram</label>
+        <input type="text" th:field="*{instagram}">
+
+        <label>Twitter</label>
+        <input type="text" th:field="*{twitter}">
+
+        <label>YouTube</label>
+        <input type="text" th:field="*{youtube}">
+
+        <label>Website</label>
+        <input type="text" th:field="*{website}">
+
+        <label>Profile Image (optional)</label>
+        <input type="file" name="profileImageFile">
+
+        <label>Banner Image (optional)</label>
+        <input type="file" name="bannerImageFile">
+
+        <button type="submit" class="update-btn">
+            Update Profile
+        </button>
+
+    </form>
+
+    <a th:href="@{/artist/profile}" class="back-link">
+        ← Back To Profile
+    </a>
+
+</div>
+
+</body>
+</html>

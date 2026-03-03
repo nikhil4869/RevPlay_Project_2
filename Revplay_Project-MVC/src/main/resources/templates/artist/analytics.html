@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Analytics</title>
+
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #0d0d0d;
+            color: white;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        h2 {
+            color: gold;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #161616;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }
+		
+		.summary-grid {
+		    display: grid;
+		    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		    gap: 25px;
+		    margin-top: 30px;
+		}
+
+		.summary-card {
+		    background: linear-gradient(145deg, #1c1c1c, #141414);
+		    padding: 25px;
+		    border-radius: 20px;
+		    box-shadow: 0 0 25px rgba(255, 215, 0, 0.05);
+		    transition: 0.3s;
+		}
+
+		.summary-card:hover {
+		    transform: translateY(-5px);
+		    box-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+		}
+
+		.card-title {
+		    font-size: 14px;
+		    color: #aaa;
+		    margin-bottom: 10px;
+		}
+
+		.card-value {
+		    font-size: 26px;
+		    font-weight: bold;
+		    color: gold;
+		}
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+    <div th:replace="fragments/sidebar :: artistSidebar('analytics')"></div>
+
+	<div class="content">
+
+	    <h2>📊 Artist Analytics</h2>
+
+	    <!-- SUMMARY CARDS -->
+		<div class="summary-grid">
+
+		    <div class="summary-card">
+		        <div class="card-title">Total Plays</div>
+		        <div class="card-value"
+		             th:text="${analytics.totalPlays}">0</div>
+		    </div>
+
+		    <div class="summary-card">
+		        <div class="card-title">Total Songs</div>
+		        <div class="card-value"
+		             th:text="${analytics.totalSongs}">0</div>
+		    </div>
+
+		    <div class="summary-card">
+		        <div class="card-title">Total Albums</div>
+		        <div class="card-value"
+		             th:text="${analytics.totalAlbums}">0</div>
+		    </div>
+
+		    <div class="summary-card">
+		        <div class="card-title">Total Favorites</div>
+		        <div class="card-value"
+		             th:text="${analytics.totalFavorites}">0</div>
+		    </div>
+
+		    <div class="summary-card">
+		        <div class="card-title">Unique Listeners</div>
+		        <div class="card-value"
+		             th:text="${listeners.uniqueListeners}">0</div>
+		    </div>
+
+		</div>
+		
+		<!-- TOP SONGS SECTION -->
+		<div class="card" style="margin-top:40px;">
+
+		    <h3 style="color:gold; margin-bottom:20px;">
+		        🎵 Top 5 Most Played Songs
+		    </h3>
+
+		    <ul style="list-style:none; padding:0;">
+
+		        <li th:each="song : ${analytics.topSongs}"
+		            style="padding:10px 0; border-bottom:1px solid #222;">
+
+		            <span th:text="${song}">Song Name</span>
+
+		        </li>
+
+		    </ul>
+
+		</div>
+		
+		<!-- SONG PLAY CHART -->
+		<!-- SONG PLAY DISTRIBUTION -->
+		<div class="card" style="margin-top:40px;">
+
+		    <h3 style="color:gold; margin-bottom:25px;">
+		        📊 Song Play Distribution
+		    </h3>
+
+		    <div th:each="song : ${playChart}" style="margin-bottom:25px;">
+
+		        <!-- Title + Stats Row -->
+		        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+		            <span style="font-weight:500;" th:text="${song.title}">Song</span>
+
+		            <div style="display:flex; gap:15px;">
+		                <span style="color:#aaa;" th:text="${song.plays} + ' plays'">0 plays</span>
+
+		                <span style="color:gold; font-weight:bold;"
+		                      th:text="${analytics.totalPlays > 0} ?
+		                               (${song.plays} * 100 / ${analytics.totalPlays}) + '%' 
+		                               : '0%'">
+		                    0%
+		                </span>
+		            </div>
+		        </div>
+
+		        <!-- Background Bar -->
+		        <div style="background:#222; height:12px; border-radius:12px; overflow:hidden;">
+
+		            <!-- Animated Fill -->
+		            <div th:style="${analytics.totalPlays > 0} ?
+		                    'width:' + (${song.plays} * 100 / ${analytics.totalPlays}) + '%;' 
+		                    : 'width:0%;'"
+		                 style="
+		                    height:12px;
+		                    background: linear-gradient(90deg, gold, #ffcc00);
+		                    border-radius:12px;
+		                    transition: width 1s ease-in-out;
+		                 ">
+		            </div>
+
+		        </div>
+
+		    </div>
+
+		</div>
+		
+		<!-- DAILY TREND CHART -->
+		<div class="card" style="margin-top:40px;">
+
+		    <h3 style="color:gold; margin-bottom:25px;">
+		        📈 Daily Play Trends
+		    </h3>
+
+		    <canvas id="dailyTrendChart" height="100"></canvas>
+
+		</div>
+
+	</div>
+
+</div>
+
+<script th:inline="javascript">
+
+    const trendDataObject = /*[[${dailyTrends}]]*/ [];
+
+    const trendLabels = trendDataObject.map(t => t.date);
+    const trendData = trendDataObject.map(t => t.plays);
+
+    const ctx = document.getElementById('dailyTrendChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: trendLabels,
+            datasets: [{
+                label: 'Daily Plays',
+                data: trendData,
+                borderColor: 'gold',
+                backgroundColor: 'rgba(255,215,0,0.1)',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: 'gold'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: 'white' } }
+            },
+            scales: {
+                x: { ticks: { color: 'white' }, grid: { color: '#222' }},
+                y: { ticks: { color: 'white' }, grid: { color: '#222' }}
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

@@ -20,6 +20,9 @@ import com.example.demo.repository.AlbumRepository;
 import com.example.demo.repository.ArtistRepository;
 import com.example.demo.repository.SongRepository;
 import com.example.demo.service.SearchService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -28,7 +31,7 @@ public class SearchServiceImpl implements SearchService {
 	private final ArtistRepository artistRepository;
 	private final AlbumRepository albumRepository;
 	
-	
+	private static final Logger logger = LogManager.getLogger(SearchServiceImpl.class);
 	
 	public SearchServiceImpl(SongRepository songRepository, ArtistRepository artistRepository,
 			AlbumRepository albumRepository) {
@@ -40,7 +43,9 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public List<SongDTO> searchSongs(String keyword) {
 
-	    return songRepository
+	    logger.debug("Searching songs with keyword: {}", keyword);
+
+	    List<SongDTO> songs = songRepository
 	            .findByTitleContainingIgnoreCaseAndIsPublicTrue(keyword)
 	            .stream()
 	            .map(song -> new SongDTO(
@@ -51,16 +56,21 @@ public class SearchServiceImpl implements SearchService {
 	                    song.getAudioPath(),
 	                    song.getCoverImage(),
 	                    song.getArtist().getName()
-	                
 	            ))
 	            .collect(Collectors.toList());
+
+	    logger.info("Found {} songs for keyword '{}'", songs.size(), keyword);
+
+	    return songs;
 	}
 
 
 	@Override
 	public List<ArtistDTO> searchArtists(String keyword) {
 
-	    return artistRepository
+	    logger.debug("Searching artists with keyword: {}", keyword);
+
+	    List<ArtistDTO> artists = artistRepository
 	            .findByArtistNameContainingIgnoreCase(keyword)
 	            .stream()
 	            .map(artist -> {
@@ -70,12 +80,18 @@ public class SearchServiceImpl implements SearchService {
 	                return dto;
 	            })
 	            .collect(Collectors.toList());
+
+	    logger.info("Found {} artists for keyword '{}'", artists.size(), keyword);
+
+	    return artists;
 	}
 
 	@Override
 	public List<AlbumDTO> searchAlbums(String keyword) {
 
-	    return albumRepository
+	    logger.debug("Searching albums with keyword: {}", keyword);
+
+	    List<AlbumDTO> albums = albumRepository
 	            .findByNameContainingIgnoreCase(keyword)
 	            .stream()
 	            .map(album -> new AlbumDTO(
@@ -87,41 +103,27 @@ public class SearchServiceImpl implements SearchService {
 	                    album.getArtist().getName()
 	            ))
 	            .collect(Collectors.toList());
+
+	    logger.info("Found {} albums for keyword '{}'", albums.size(), keyword);
+
+	    return albums;
 	}
 	
 	@Override
-    public List<SongDTO> searchByYear(Integer year) {
+	public List<SongDTO> searchByYear(Integer year) {
 
-        List<Song> songs = songRepository.findByReleaseYear(year);
+	    logger.debug("Searching songs by release year: {}", year);
 
-        if (songs.isEmpty()) {
-            throw new ResourceNotFoundException("No songs found for year " + year);
-        }
+	    List<Song> songs = songRepository.findByReleaseYear(year);
 
-        return songs.stream()
-	            .map(song -> new SongDTO(
-	                    song.getId(),
-	                    song.getTitle(),
-	                    song.getGenre(),
-	                    song.getDuration(),
-	                    song.getAudioPath(),
-	                    song.getCoverImage(),
-	                    song.getArtist().getName()
-	            ))
-                .toList();
-    }
-	
-	@Override
-	public List<String> getAllGenres() {
-	    return songRepository.findAllGenres();
-	}
+	    if (songs.isEmpty()) {
+	        logger.warn("No songs found for year {}", year);
+	        throw new ResourceNotFoundException("No songs found for year " + year);
+	    }
 
-	@Override
-	public List<SongDTO> searchSongsByGenre(String genre) {
+	    logger.info("Found {} songs for year {}", songs.size(), year);
 
-	    return songRepository
-	            .findByGenreIgnoreCaseContaining(genre)
-	            .stream()
+	    return songs.stream()
 	            .map(song -> new SongDTO(
 	                    song.getId(),
 	                    song.getTitle(),
@@ -134,7 +136,45 @@ public class SearchServiceImpl implements SearchService {
 	            .toList();
 	}
 	
+<<<<<<< HEAD
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
+=======
+	@Override
+	public List<String> getAllGenres() {
+
+	    logger.debug("Fetching all available genres");
+
+	    List<String> genres = songRepository.findAllGenres();
+
+	    logger.info("Fetched {} genres", genres.size());
+
+	    return genres;
+	}
+	@Override
+	public List<SongDTO> searchSongsByGenre(String genre) {
+
+	    logger.debug("Searching songs by genre: {}", genre);
+
+	    List<SongDTO> songs = songRepository
+	            .findByGenreIgnoreCaseContaining(genre)
+	            .stream()
+	            .map(song -> new SongDTO(
+	                    song.getId(),
+	                    song.getTitle(),
+	                    song.getGenre(),
+	                    song.getDuration(),
+	                    song.getAudioPath(),
+	                    song.getCoverImage(),
+	                    song.getArtist().getName()
+	            ))
+	            .toList();
+
+	    logger.info("Found {} songs for genre '{}'", songs.size(), genre);
+
+	    return songs;
+	}
+	
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
 
 import java.util.Collections;
 import java.util.List;

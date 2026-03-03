@@ -14,9 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.demo.config.JwtUtil;
 import com.example.demo.exception.UnauthorizedException;
+import com.example.demo.dto.auth.AuthResponse;
 import com.example.demo.dto.auth.ForgotPasswordRequest;
 
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -26,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-
+    private static final Logger logger = LogManager.getLogger(AuthServiceImpl.class);
     public AuthServiceImpl(UserRepository userRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
@@ -41,25 +43,34 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String register(RegisterRequest request) {
 
+        logger.debug("Registration attempt for email: {}", request.getEmail());
+
         if (userRepository.existsByEmail(request.getEmail())) {
+            logger.warn("Registration failed - Email already registered: {}", request.getEmail());
             throw new DuplicateResourceException("Email already registered");
         }
 
         if (!request.getPassword().equals(request.getConfirmPassword())) {
+            logger.warn("Registration failed - Passwords do not match for email: {}", request.getEmail());
             throw new BadRequestException("Passwords do not match");
         }
 
         if (!PasswordValidator.isStrong(request.getPassword())) {
+            logger.warn("Registration failed - Weak password for email: {}", request.getEmail());
             throw new BadRequestException("Password not strong enough");
         }
 
         if (!AgeValidator.isAdult(request.getDateOfBirth())) {
+            logger.warn("Registration failed - Underage user attempt: {}", request.getEmail());
             throw new BadRequestException("User must be at least 13 years old");
         }
 
         Role role = roleRepository
                 .findByNameIgnoreCase(request.getRole())
-                .orElseThrow(() -> new BadRequestException("Invalid role"));
+                .orElseThrow(() -> {
+                    logger.warn("Registration failed - Invalid role: {}", request.getRole());
+                    return new BadRequestException("Invalid role");
+                });
 
         User user = new User();
         user.setName(request.getName());
@@ -70,36 +81,59 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
+        logger.info("User registered successfully. Email: {}, Role: {}",
+                request.getEmail(), role.getName());
+
         return "User registered successfully";
     }
     
     @Override
-    public String login(String email, String password) {
+    public AuthResponse login(String email, String password) {
+
+        logger.debug("Login attempt for email: {}", email);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UnauthorizedException("Invalid credentials"));
+                .orElseThrow(() -> {
+                    logger.warn("Login failed - Invalid credentials for email: {}", email);
+                    return new UnauthorizedException("Invalid credentials");
+                });
+
+        if (!user.isEnabled()) {
+            logger.warn("Login attempt on disabled account. Email: {}", email);
+            throw new UnauthorizedException(
+                    "Account is deactivated. Use forgot password to reactivate."
+            );
+        }
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
+            logger.warn("Login failed - Incorrect password for email: {}", email);
             throw new UnauthorizedException("Invalid credentials");
         }
-        
-        if (!user.isEnabled()) {
-            throw new UnauthorizedException("Account is deactivated. Use forgot password to reactivate.");
-        }
 
+        String token = jwtUtil.generateToken(
+                user.getEmail(),
+                user.getRole().getName()
+        );
 
-        return jwtUtil.generateToken(user.getEmail());
+        logger.info("Login successful. Email: {}, Role: {}",
+                email, user.getRole().getName());
+
+        return new AuthResponse(token, user.getRole().getName());
     }
-    
     @Override
     public void resetPassword(ForgotPasswordRequest request) {
 
+        logger.debug("Password reset attempt for email: {}", request.getEmail());
+
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BadRequestException("User not found"));
+                .orElseThrow(() -> {
+                    logger.warn("Password reset failed - User not found: {}", request.getEmail());
+                    return new BadRequestException("User not found");
+                });
 
         if (!user.getDateOfBirth().toString()
                 .equals(request.getDateOfBirth())) {
+            logger.warn("Password reset failed - Invalid DOB for email: {}", request.getEmail());
             throw new BadRequestException("Invalid date of birth");
         }
 
@@ -109,6 +143,7 @@ public class AuthServiceImpl implements AuthService {
         // 🔥 Reactivate account if disabled
 =======
         if (!PasswordValidator.isStrong(request.getNewPassword())) {
+            logger.warn("Password reset failed - Weak password for email: {}", request.getEmail());
             throw new BadRequestException("Password not strong enough");
         }
 
@@ -117,6 +152,9 @@ public class AuthServiceImpl implements AuthService {
         user.setEnabled(true);
 
         userRepository.save(user);
+
+        logger.info("Password reset successful. Account reactivated. Email: {}",
+                request.getEmail());
     }
 
 <<<<<<< HEAD

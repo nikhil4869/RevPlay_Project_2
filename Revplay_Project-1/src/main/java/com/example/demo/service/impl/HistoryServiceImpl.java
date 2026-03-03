@@ -84,13 +84,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.example.demo.dto.music.MostPlayedDTO;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 @Service
 public class HistoryServiceImpl implements HistoryService {
 
     private final PlayHistoryRepository historyRepository;
     private final UserRepository userRepository;
-
+    private static final Logger logger = LogManager.getLogger(HistoryServiceImpl.class);
     public HistoryServiceImpl(PlayHistoryRepository historyRepository,
                               UserRepository userRepository) {
         this.historyRepository = historyRepository;
@@ -111,16 +112,24 @@ public class HistoryServiceImpl implements HistoryService {
     public List<HistoryDTO> getRecentHistory() {
 
         String email = SecurityUtil.getCurrentUserEmail();
+        logger.debug("Fetching recent history for user: {}", email);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    logger.warn("User not found while fetching recent history: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
 
-        return historyRepository
+        List<HistoryDTO> history = historyRepository
                 .findTop50ByUserOrderByPlayedAtDesc(user)
                 .stream()
                 .map(this::mapToDTO)
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
                 .collect(Collectors.toList());
+
+        logger.info("Recent history fetched for user: {} - Records: {}", email, history.size());
+
+        return history;
     }
 
     @Override
@@ -149,15 +158,23 @@ public class HistoryServiceImpl implements HistoryService {
     public List<HistoryDTO> getFullHistory() {
 
         String email = SecurityUtil.getCurrentUserEmail();
+        logger.debug("Fetching full history for user: {}", email);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    logger.warn("User not found while fetching full history: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
 
-        return historyRepository
+        List<HistoryDTO> history = historyRepository
                 .findByUserOrderByPlayedAtDesc(user)
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        logger.info("Full history fetched for user: {} - Records: {}", email, history.size());
+
+        return history;
     }
 
     @Transactional
@@ -165,25 +182,37 @@ public class HistoryServiceImpl implements HistoryService {
     public void clearHistory() {
 
         String email = SecurityUtil.getCurrentUserEmail();
+        logger.debug("Clearing listening history for user: {}", email);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    logger.warn("User not found while clearing history: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
 
         historyRepository.deleteByUser(user);
+
+        logger.info("Listening history cleared successfully for user: {}", email);
     }
     
     @Override
     public ListeningTimeDTO getListeningTime() {
 
         String email = SecurityUtil.getCurrentUserEmail();
+        logger.debug("Calculating listening time for user: {}", email);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    logger.warn("User not found while calculating listening time: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
 
         int totalSeconds = historyRepository.findByUserOrderByPlayedAtDesc(user)
                 .stream()
                 .mapToInt(PlayHistory::getDurationPlayed)
                 .sum();
+
+        logger.info("Total listening time for user {}: {} seconds", email, totalSeconds);
 
         return new ListeningTimeDTO(totalSeconds);
     }
@@ -192,11 +221,15 @@ public class HistoryServiceImpl implements HistoryService {
     public List<MostPlayedDTO> getMostPlayed() {
 
         String email = SecurityUtil.getCurrentUserEmail();
+        logger.debug("Fetching most played songs for user: {}", email);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    logger.warn("User not found while fetching most played songs: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
 
-        return historyRepository.findMostPlayedSongs(user)
+        List<MostPlayedDTO> mostPlayed = historyRepository.findMostPlayedSongs(user)
                 .stream()
                 .map(obj -> new MostPlayedDTO(
                         (Long) obj[0],
@@ -204,6 +237,13 @@ public class HistoryServiceImpl implements HistoryService {
                         (Long) obj[2]
                 ))
                 .collect(Collectors.toList());
+<<<<<<< HEAD
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
+=======
+
+        logger.info("Most played songs fetched for user: {} - Records: {}", email, mostPlayed.size());
+
+        return mostPlayed;
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
     }
 }

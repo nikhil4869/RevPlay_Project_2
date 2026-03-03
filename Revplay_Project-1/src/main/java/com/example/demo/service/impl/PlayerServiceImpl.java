@@ -30,8 +30,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+<<<<<<< HEAD
 
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
+=======
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
@@ -45,7 +50,7 @@ public class PlayerServiceImpl implements PlayerService {
                              ListeningHistoryRepository historyRepository) {
 =======
     private final PlayHistoryRepository historyRepository;
-
+    private static final Logger logger = LogManager.getLogger(PlayerServiceImpl.class);
     public PlayerServiceImpl(SongRepository songRepository,
                              UserRepository userRepository,
                              PlayHistoryRepository historyRepository) {
@@ -66,14 +71,26 @@ public class PlayerServiceImpl implements PlayerService {
     public void playSong(Long songId) {
 
         String email = SecurityUtil.getCurrentUserEmail();
+        logger.debug("User {} requested to play song with id: {}", email, songId);
 
         User user = userRepository.findByEmail(email)
+<<<<<<< HEAD
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+=======
+                .orElseThrow(() -> {
+                    logger.warn("User not found while playing song. Email: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
 
         Song song = songRepository.findById(songId)
-                .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
+                .orElseThrow(() -> {
+                    logger.warn("Song not found. Song ID: {}", songId);
+                    return new ResourceNotFoundException("Song not found");
+                });
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         if (!song.isPublic()) {
             throw new RuntimeException("Song is not public");
@@ -151,42 +168,69 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
 =======
+=======
+        // ✅ Count only normal user plays
+        if (user.getRole() != null &&
+            user.getRole().getName().equalsIgnoreCase("user")) {
+
+            song.setPlayCount(song.getPlayCount() + 1);
+            songRepository.save(song);
+
+            logger.info("Play count incremented for song '{}' (ID: {}) by user {}",
+                    song.getTitle(), songId, email);
+        }
+
+        // Save history
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
         PlayHistory history = new PlayHistory();
         history.setUser(user);
         history.setSong(song);
         history.setPlayedAt(LocalDateTime.now());
 
-        // convert duration "4:30" → seconds
         String duration = song.getDuration();
         int seconds = 0;
 
         if (duration != null && duration.contains(":")) {
-            String[] parts = duration.split(":");
-            seconds = Integer.parseInt(parts[0]) * 60 + Integer.parseInt(parts[1]);
+            try {
+                String[] parts = duration.split(":");
+                seconds = Integer.parseInt(parts[0]) * 60
+                        + Integer.parseInt(parts[1]);
+            } catch (Exception e) {
+                logger.error("Invalid duration format for song '{}' (ID: {})",
+                        song.getTitle(), songId, e);
+            }
         }
 
         history.setDurationPlayed(seconds);
-
         historyRepository.save(history);
+
+        logger.info("Play history saved for user {} and song '{}'",
+                email, song.getTitle());
     }
     
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
     @Override
     public List<SongDTO> getTrendingSongs(int limit) {
 
-        // For now trending = most played (simple logic)
-        // Later we can improve with weekly trend
+        logger.debug("Fetching trending songs with limit: {}", limit);
 
-        return songRepository
+        List<SongDTO> trending = songRepository
                 .findByIsPublicTrueOrderByPlayCountDesc()
                 .stream()
                 .limit(limit)
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        logger.info("Trending songs fetched. Total returned: {}", trending.size());
+
+        return trending;
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     
+=======
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
     private SongDTO mapToDTO(Song song) {
         return new SongDTO(
                 song.getId(),

@@ -5,7 +5,7 @@ public class ArtistDTO {
     private String artistName;
     private String bio;
     private String genre;
-
+    private Long id;
     private String instagram;
     private String twitter;
     private String youtube;
@@ -77,5 +77,13 @@ public class ArtistDTO {
 
     public String getBannerImage() { return bannerImage; }
     public void setBannerImage(String bannerImage) { this.bannerImage = bannerImage; }
+    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }

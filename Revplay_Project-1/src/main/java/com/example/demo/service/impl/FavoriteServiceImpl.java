@@ -24,14 +24,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
     private final SongRepository songRepository;
     private final UserRepository userRepository;
-
+    private static final Logger logger = LogManager.getLogger(FavoriteServiceImpl.class);
     public FavoriteServiceImpl(FavoriteRepository favoriteRepository,
                                SongRepository songRepository,
                                UserRepository userRepository) {
@@ -63,14 +64,26 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public void addFavorite(Long songId) {
 
+        logger.debug("Attempting to add favorite. Song id: {}", songId);
+
         String email = SecurityUtil.getCurrentUserEmail();
 
         User user = userRepository.findByEmail(email)
+<<<<<<< HEAD
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+=======
+                .orElseThrow(() -> {
+                    logger.error("User not found while adding favorite. Email: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
 
         Song song = songRepository.findById(songId)
-                .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
+                .orElseThrow(() -> {
+                    logger.error("Song not found while adding favorite. Song id: {}", songId);
+                    return new ResourceNotFoundException("Song not found");
+                });
 
 <<<<<<< HEAD
         favoriteRepository.findByListenerAndSong(listener, song)
@@ -82,6 +95,8 @@ public class FavoriteServiceImpl implements FavoriteService {
         favorite.setListener(listener);
 =======
         if (favoriteRepository.findByUserAndSong(user, song).isPresent()) {
+            logger.warn("Duplicate favorite attempt. User id: {}, Song id: {}",
+                    user.getId(), songId);
             throw new BadRequestException("Song already in favorites");
         }
 
@@ -91,6 +106,9 @@ public class FavoriteServiceImpl implements FavoriteService {
         favorite.setSong(song);
 
         favoriteRepository.save(favorite);
+
+        logger.info("Song added to favorites successfully. User id: {}, Song id: {}",
+                user.getId(), songId);
     }
 
     @Override
@@ -103,24 +121,47 @@ public class FavoriteServiceImpl implements FavoriteService {
 =======
     public void removeFavorite(Long songId) {
 
+        logger.debug("Attempting to remove favorite. Song id: {}", songId);
+
         String email = SecurityUtil.getCurrentUserEmail();
 
         User user = userRepository.findByEmail(email)
+<<<<<<< HEAD
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+=======
+                .orElseThrow(() -> {
+                    logger.error("User not found while removing favorite. Email: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
 
         Song song = songRepository.findById(songId)
-                .orElseThrow(() -> new ResourceNotFoundException("Song not found"));
+                .orElseThrow(() -> {
+                    logger.error("Song not found while removing favorite. Song id: {}", songId);
+                    return new ResourceNotFoundException("Song not found");
+                });
 
 <<<<<<< HEAD
         Favorite favorite = favoriteRepository
                 .findByListenerAndSong(listener, song)
 =======
         Favorite favorite = favoriteRepository.findByUserAndSong(user, song)
+<<<<<<< HEAD
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
                 .orElseThrow(() -> new ResourceNotFoundException("Favorite not found"));
+=======
+                .orElseThrow(() -> {
+                    logger.warn("Favorite not found for removal. User id: {}, Song id: {}",
+                            user.getId(), songId);
+                    return new ResourceNotFoundException("Favorite not found");
+                });
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
 
         favoriteRepository.delete(favorite);
+
+        logger.info("Song removed from favorites successfully. User id: {}, Song id: {}",
+                user.getId(), songId);
     }
 
     @Override
@@ -141,15 +182,25 @@ public class FavoriteServiceImpl implements FavoriteService {
 =======
     public List<SongDTO> getMyFavorites() {
 
+        logger.debug("Fetching favorites for current user");
+
         String email = SecurityUtil.getCurrentUserEmail();
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    logger.error("User not found while fetching favorites. Email: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
 
-        return favoriteRepository.findByUser(user)
+        List<SongDTO> favorites = favoriteRepository.findByUser(user)
                 .stream()
                 .map(fav -> mapToDTO(fav.getSong()))
                 .collect(Collectors.toList());
+
+        logger.info("Fetched {} favorite songs for user id: {}",
+                favorites.size(), user.getId());
+
+        return favorites;
     }
 }
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08

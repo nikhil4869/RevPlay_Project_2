@@ -58,6 +58,23 @@ public class AlbumController {
     public List<AlbumDTO> getAllAlbums() {
         return albumService.getAllAlbums();
     }
+    
+    @PutMapping("/{id}")
+    public AlbumDTO updateAlbum(
+            @PathVariable Long id,
+            @RequestParam String name,
+            @RequestParam String description,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate releaseDate) {
+
+        return albumService.updateAlbum(id, name, description, releaseDate);
+    }
+    
+    @DeleteMapping("/{id}")
+    public String deleteAlbum(@PathVariable Long id) {
+        albumService.deleteAlbum(id);
+        return "Album deleted successfully";
+    }
 
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
 }

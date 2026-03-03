@@ -57,6 +57,7 @@ public class SecurityConfig {
 	                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/songs/**").hasRole("ARTIST")
 
 	                .requestMatchers("/artist/**").hasRole("ARTIST")
+	                .requestMatchers("/user/deactivate").hasAnyRole("USER", "ARTIST")
 	                .requestMatchers("/user/**").hasRole("USER")
 	                .requestMatchers("/favorites/**").hasRole("USER")
 	                .requestMatchers("/history/**").hasRole("USER")
@@ -67,8 +68,14 @@ public class SecurityConfig {
 	                .requestMatchers(HttpMethod.GET, "/playlists/public/**").permitAll()
 	                // USER playlist features
 	                .requestMatchers("/playlists/**").hasRole("USER")
+<<<<<<< HEAD
 >>>>>>> daf7a6e101d383c386b27942eb94de04b50ebd08
+=======
+	                .requestMatchers("/images/**").permitAll()
+	                .requestMatchers("/audio/**").permitAll()
+>>>>>>> d4f4593 (Initial commit of RevPlay project)
 	                .anyRequest().authenticated()
+
 	        );
 
 
