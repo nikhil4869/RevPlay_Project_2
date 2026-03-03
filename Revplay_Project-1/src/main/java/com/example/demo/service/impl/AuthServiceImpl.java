@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.demo.config.JwtUtil;
 import com.example.demo.exception.UnauthorizedException;
+import com.example.demo.dto.auth.AuthResponse;
+import com.example.demo.dto.auth.ForgotPasswordRequest;
+
 
 
 @Service
@@ -72,17 +75,54 @@ public class AuthServiceImpl implements AuthService {
     }
     
     @Override
-    public String login(String email, String password) {
+    public AuthResponse login(String email, String password) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UnauthorizedException("Invalid credentials"));
 
+        // 🔴 FIRST check if account is disabled
+        if (!user.isEnabled()) {
+            throw new UnauthorizedException(
+                    "Account is deactivated. Use forgot password to reactivate."
+            );
+        }
+
+        // 🔐 THEN check password
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new UnauthorizedException("Invalid credentials");
         }
 
-        return jwtUtil.generateToken(user.getEmail());
+        // 🎟 Generate JWT token
+        String token = jwtUtil.generateToken(
+                user.getEmail(),
+                user.getRole().getName()
+        );
+
+        return new AuthResponse(token, user.getRole().getName());
     }
+    
+    @Override
+    public void resetPassword(ForgotPasswordRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new BadRequestException("User not found"));
+
+        if (!user.getDateOfBirth().toString()
+                .equals(request.getDateOfBirth())) {
+            throw new BadRequestException("Invalid date of birth");
+        }
+
+        if (!PasswordValidator.isStrong(request.getNewPassword())) {
+            throw new BadRequestException("Password not strong enough");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        user.setEnabled(true);
+
+        userRepository.save(user);
+    }
+
+
 
 }

@@ -25,6 +25,12 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+    
+    @Column(length = 500)
+    private String bio;
+
+    private String profileImage;
+
 
     public User() {}
 
@@ -57,4 +63,20 @@ public class User {
     public Role getRole() { return role; }
 
     public void setRole(Role role) { this.role = role; }
+    
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+    
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 }

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevPlay - Analytics</title>
+    <link rel="stylesheet" th:href="@{/css/user-style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Force critical layout before main CSS if possible */
+        .analytics-container {
+            display: block !important;
+            opacity: 1 !important;
+        }
+
+        :root {
+            --artist-bg: #0d0d0d;
+            --card-main: #161616;
+            --card-grad-start: #1c1c1c;
+            --card-grad-end: #141414;
+            --accent-gold: gold;
+            --text-muted: #aaa;
+        }
+
+        .analytics-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0 50px 0;
+        }
+
+        .dashboard-header h1 {
+            color: var(--accent-gold);
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card-premium {
+            background: linear-gradient(145deg, var(--card-grad-start), var(--card-grad-end));
+            padding: 25px;
+            border-radius: 4px;
+            /* Rectangular as requested */
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: 0.3s;
+            border: 1px solid rgba(255, 215, 0, 0.05);
+        }
+
+        .stat-card-premium:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+            border-color: var(--accent-gold);
+        }
+
+        .stat-icon-large {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--accent-gold);
+        }
+
+        .stat-data .stat-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .stat-data .stat-value {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .insight-card {
+            background: var(--card-main);
+            padding: 25px;
+            border-radius: 4px;
+            /* Rectangular as requested */
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 15px;
+        }
+
+        .insight-header i {
+            color: var(--accent-gold);
+            font-size: 20px;
+        }
+
+        .insight-header h3 {
+            color: var(--accent-gold);
+            font-size: 18px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .ranking-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            gap: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .ranking-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank-number {
+            font-weight: bold;
+            color: var(--text-muted);
+            width: 20px;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-main-text {
+            display: block;
+            font-size: 15px;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .item-sub-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .play-chip {
+            color: var(--accent-gold);
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        @media (max-width: 1024px) {
+            .insights-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .hero-stats,
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="dark-theme">
+    <div class="layout-container">
+        <div th:replace="~{fragments/user-sidebar :: userSidebar('analytics')}"></div>
+        <main class="main-content">
+            <div class="content-scroll">
+                <div class="analytics-container">
+                    <header class="dashboard-header">
+                        <div>
+                            <h1 class="welcome-text">📊 Your <span class="accent-text">Listening Insights</span></h1>
+                            <p style="color: var(--text-secondary); margin-top: 8px; font-size: 16px;">
+                                Discover your music patterns and top content
+                            </p>
+                        </div>
+                    </header>
+
+                    <div th:if="${errorMessage}" class="error-message"
+                        style="background: rgba(220, 53, 69, 0.1); color: #ff4d4d; padding: 20px; border-radius: 16px; margin-bottom: 30px; border: 1px solid rgba(220, 53, 69, 0.2); display: flex; align-items: center; gap: 15px;">
+                        <i class="fa-solid fa-circle-exclamation" style="font-size: 20px;"></i>
+                        <span th:text="${errorMessage}">Unable to load real-time analytics.</span>
+                    </div>
+
+                    <!-- Hero Stats -->
+                    <section class="hero-stats">
+                        <div class="stat-card-premium">
+                            <div class="stat-icon-large">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-desc">Favorites</span>
+                                <div class="stat-value" th:text="${analytics.favoritesCount}">0</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card-premium">
+                            <div class="stat-icon-large">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-desc">Playlists</span>
+                                <div class="stat-value" th:text="${analytics.playlistsCount}">0</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card-premium">
+                            <div class="stat-icon-large">
+                                <i class="fa-solid fa-stopwatch"></i>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-desc">Listening Time</span>
+                                <div class="stat-value" th:text="${analytics.listeningTime}">0h 0m</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Detailed Insights Grid -->
+                    <div class="insights-grid">
+
+                        <!-- Top Songs -->
+                        <div class="insight-card">
+                            <div class="insight-header">
+                                <i class="fa-solid fa-bolt"></i>
+                                <h3>🎵 Most Played Songs</h3>
+                            </div>
+                            <ul class="ranking-list">
+                                <li th:each="song, iter : ${analytics.topSongs}" class="ranking-item">
+                                    <span class="rank-number" th:text="${iter.index + 1}">1</span>
+                                    <div class="item-info">
+                                        <span class="item-main-text" th:text="${song.title}">Song Title</span>
+                                        <span class="item-sub-text">Total plays</span>
+                                    </div>
+                                    <span class="play-chip" th:text="${song.count + ' plays'}">0 plays</span>
+                                </li>
+                                <li th:if="${#lists.isEmpty(analytics.topSongs)}"
+                                    style="padding: 20px; text-align: center; color: var(--text-muted);">
+                                    <i class="fa-solid fa-music"
+                                        style="display: block; font-size: 24px; margin-bottom: 10px; opacity: 0.3;"></i>
+                                    Keep listening to see your top songs!
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Top Artists -->
+                        <div class="insight-card">
+                            <div class="insight-header">
+                                <i class="fa-solid fa-microphone-lines"></i>
+                                <h3>👤 Top Artists</h3>
+                            </div>
+                            <ul class="ranking-list">
+                                <li th:each="artist, iter : ${analytics.topArtists}" class="ranking-item">
+                                    <span class="rank-number" th:text="${iter.index + 1}">1</span>
+                                    <div class="item-info">
+                                        <span class="item-main-text" th:text="${artist.name}">Artist Name</span>
+                                        <span class="item-sub-text">Frequent listens</span>
+                                    </div>
+                                    <span class="play-chip" th:text="${artist.count + ' tracks'}">0 tracks</span>
+                                </li>
+                                <li th:if="${#lists.isEmpty(analytics.topArtists)}"
+                                    style="padding: 20px; text-align: center; color: var(--text-muted);">
+                                    <i class="fa-solid fa-user"
+                                        style="display: block; font-size: 24px; margin-bottom: 10px; opacity: 0.3;"></i>
+                                    Listen to more artists for insights
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Top Genres -->
+                        <div class="insight-card">
+                            <div class="insight-header">
+                                <i class="fa-solid fa-compact-disc"></i>
+                                <h3>🎶 Genre Vibes</h3>
+                            </div>
+                            <ul class="ranking-list">
+                                <li th:each="genre, iter : ${analytics.topGenres}" class="ranking-item">
+                                    <span class="rank-number" th:text="${iter.index + 1}">1</span>
+                                    <div class="item-info">
+                                        <span class="item-main-text" th:text="${genre.genre}">Genre Name</span>
+                                        <span class="item-sub-text">Your primary tastes</span>
+                                    </div>
+                                    <span class="play-chip" th:text="${genre.count + ' tracks'}">0 tracks</span>
+                                </li>
+                                <li th:if="${#lists.isEmpty(analytics.topGenres)}"
+                                    style="padding: 20px; text-align: center; color: var(--text-muted);">
+                                    <i class="fa-solid fa-record-vinyl"
+                                        style="display: block; font-size: 24px; margin-bottom: 10px; opacity: 0.3;"></i>
+                                    Explore more genres!
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div th:replace="~{fragments/global-player :: globalPlayer}"></div>
+</body>
+
+</html>

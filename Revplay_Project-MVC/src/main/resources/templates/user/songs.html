@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevPlay - Songs</title>
+
+    <!-- Link to our modern user style -->
+    <link rel="stylesheet" th:href="@{/css/user-style.css}">
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="dark-theme">
+
+    <div class="layout-container">
+
+        <!-- Sidebar Fragment Integration -->
+        <div th:replace="~{fragments/user-sidebar :: userSidebar('songs')}"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- Search Bar Section -->
+            <header class="top-header">
+                <div class="header-search-filter-row">
+                    <form th:action="@{/search}" method="GET" class="search-form">
+                        <div class="search-input-wrapper">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" name="keyword" class="search-input" th:value="${keyword}"
+                                placeholder="Search songs, artists, albums..." required>
+                        </div>
+                    </form>
+
+                    <div class="filters-container">
+                        <!-- Artist Filter -->
+                        <div class="filter-dropdown">
+                            <button class="filter-btn">
+                                <i class="fa-solid fa-user"></i> Artists <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-menu">
+                                <a th:each="artist : ${artists}" th:href="@{/search(artistId=${artist.id})}"
+                                    th:text="${artist.artistName}" class="filter-item">Artist</a>
+                            </div>
+                        </div>
+
+                        <!-- Genre Filter -->
+                        <div class="filter-dropdown">
+                            <button class="filter-btn">
+                                <i class="fa-solid fa-guitar"></i> Genres <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-menu">
+                                <a th:each="genre : ${genres}" th:href="@{/search(genre=${genre})}" th:text="${genre}"
+                                    class="filter-item">Genre</a>
+                            </div>
+                        </div>
+
+                        <!-- Year Filter -->
+                        <div class="filter-dropdown">
+                            <button class="filter-btn">
+                                <i class="fa-solid fa-calendar"></i> Year <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-menu">
+                                <a th:each="yr : ${years}" th:href="@{/search(year=${yr})}" th:text="${yr}"
+                                    class="filter-item">Year</a>
+                            </div>
+                        </div>
+
+                        <!-- Album Filter -->
+                        <div class="filter-dropdown">
+                            <button class="filter-btn">
+                                <i class="fa-solid fa-compact-disc"></i> Albums <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-menu">
+                                <a th:each="album : ${albums}" th:href="@{/search(albumId=${album.id})}"
+                                    th:text="${album.name}" class="filter-item">Album</a>
+                            </div>
+                        </div>
+
+                        <a th:href="@{/user/songs}" class="clear-filters-btn"
+                            th:if="${keyword != null || activeGenre != null || activeYear != null || activeArtistId != null || activeAlbumId != null}">
+                            <i class="fa-solid fa-xmark"></i> Clear
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-scroll">
+                <h1 class="page-title">Songs</h1>
+
+                <!-- Error Message Display -->
+                <div th:if="${errorMessage}" class="alert alert-danger"
+                    style="background: rgba(255, 0, 0, 0.1); color: #ff4d4d; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ff4d4d;">
+                    <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${errorMessage}">Error Message</span>
+                </div>
+
+                <div class="songs-grid">
+
+                    <!-- Iterating over ${songs} list -->
+                    <div th:each="song : ${songs}" class="song-card">
+                        <div class="song-cover-wrapper">
+                            <img th:src="${song.coverUrl != null ? (song.coverUrl.startsWith('http') ? song.coverUrl : 'http://localhost:8080' + song.coverUrl) : '/images/default-cover.png'}"
+                                class="song-cover" alt="Album Cover">
+
+                            <button class="play-overlay-btn" th:data-song-id="${song.id}"
+                                th:data-song-title="${song.title}" th:data-song-artist="${song.artistName}"
+                                th:data-song-file="${song.audioUrl}"
+                                th:data-song-cover="${song.coverUrl != null ? (song.coverUrl.startsWith('http') ? song.coverUrl : 'http://localhost:8080' + song.coverUrl) : '/images/default-cover.png'}"
+                                onclick="playSong(this)">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+
+                        <div class="song-details">
+                            <div class="song-card-header">
+                                <h3 class="song-title" th:text="${song.title}">Song Title</h3>
+                                <div class="song-options">
+                                    <button class="options-btn">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                    <div class="options-dropdown">
+                                        <button class="dropdown-item" th:onclick="'addFavorite(' + ${song.id} + ')'">
+                                            <i class="fa-regular fa-heart"></i> Add to Favorite
+                                        </button>
+                                        <button class="dropdown-item"
+                                            th:onclick="'showPlaylistModal(' + ${song.id} + ')'">
+                                            <i class="fa-solid fa-list-plus"></i> Add to Playlist
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="song-artist" th:text="${song.artistName}">Artist Name</p>
+
+                            <div class="song-meta">
+                                <span class="song-duration"
+                                    th:text="${song.duration != null ? song.duration : '3:45'}">3:45</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty State for Search/Filters -->
+                    <div th:if="${#lists.isEmpty(songs)}" class="search-empty-state">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        <h2 class="empty-msg-title">Not Available</h2>
+                        <p class="empty-msg-body">
+                            Songs are currently not available
+                            <span th:if="${keyword != null}" th:text="' for search: \'' + ${keyword} + '\''"></span>
+                            <span th:if="${activeGenre != null}"
+                                th:text="' for genre: \'' + ${activeGenre} + '\''"></span>
+                            <span th:if="${activeYear != null}" th:text="' for year: ' + ${activeYear}"></span>
+                            <span th:if="${activeArtistId != null}"> for the selected artist</span>
+                            <span th:if="${activeAlbumId != null}"> for the selected album</span>
+                        </p>
+                        <a th:href="@{/user/songs}" class="back-to-all-btn">View All Songs</a>
+                    </div>
+
+                </div>
+            </div>
+
+            <script>
+                // Any page-specific song logic can go here
+                console.log("Songs page scripts re-initialized");
+            </script>
+        </main>
+
+    </div>
+
+    <!-- Global Player Fragment Integration -->
+    <div th:replace="~{fragments/global-player :: globalPlayer}"></div>
+
+    <script>
+        // Inline scripts for play/pause or specific features can stay, 
+        // but dropdown logic is now in navigation.js
+    </script>
+</body>
+
+</html>

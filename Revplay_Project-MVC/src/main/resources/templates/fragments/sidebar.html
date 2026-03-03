@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <div th:fragment="artistSidebar(activePage)">
+
+        <style>
+            .sidebar {
+                width: 240px;
+                background: #0d0d0d;
+                padding: 25px 18px;
+                min-height: 100vh;
+                box-shadow: 4px 0 20px rgba(255, 215, 0, 0.05);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                position: sticky;
+                top: 0;
+                z-index: 500;
+                /* Below player */
+            }
+
+            .logo {
+                font-size: 22px;
+                font-weight: bold;
+                color: gold;
+                margin-bottom: 35px;
+            }
+
+            .nav-section {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav-link {
+                text-decoration: none;
+                padding: 12px 15px;
+                border-radius: 10px;
+                font-size: 15px;
+                transition: 0.3s;
+                display: block;
+            }
+
+            .nav-link.inactive {
+                color: #ccc;
+                background: #161616;
+            }
+
+            .nav-link.inactive:hover {
+                background: #222;
+                color: white;
+            }
+
+            .nav-link.active {
+                background: linear-gradient(to right, gold, #ffcc00);
+                color: black;
+                font-weight: 600;
+            }
+
+            .logout-btn {
+                margin-top: 30px;
+                padding: 12px;
+                border-radius: 12px;
+                border: none;
+                background: linear-gradient(to right, #ff4d4d, #ff1a1a);
+                color: white;
+                font-weight: 600;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            .logout-btn:hover {
+                transform: scale(1.05);
+            }
+        </style>
+
+        <div class="sidebar">
+
+            <div>
+                <div class="logo">RevPlay 🎵</div>
+
+                <div class="nav-section">
+
+                    <a th:href="@{/artist/main}"
+                        th:class="${activePage == 'dashboard'} ? 'nav-link active' : 'nav-link inactive'">
+                        Dashboard
+                    </a>
+
+                    <a th:href="@{/artist/albums}"
+                        th:class="${activePage == 'albums'} ? 'nav-link active' : 'nav-link inactive'">
+                        Albums
+                    </a>
+
+                    <a th:href="@{/artist/songs}"
+                        th:class="${activePage == 'songs'} ? 'nav-link active' : 'nav-link inactive'">
+                        My Songs
+                    </a>
+
+                    <a th:href="@{/artist/profile}"
+                        th:class="${activePage == 'profile'} ? 'nav-link active' : 'nav-link inactive'">
+                        Profile
+                    </a>
+
+                    <a th:href="@{/artist/analytics}"
+                        th:class="${activePage == 'analytics'} ? 'nav-link active' : 'nav-link inactive'">
+                        Analytics
+                    </a>
+
+                </div>
+            </div>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn">
+                    Logout
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
