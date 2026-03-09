@@ -58,4 +58,6 @@ public class GlobalExceptionHandler {
                 new ApiError("Something went wrong", 500, LocalDateTime.now()),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
+    
 }

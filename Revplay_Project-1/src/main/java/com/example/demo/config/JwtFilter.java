@@ -11,10 +11,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
@@ -38,8 +42,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Extract token
         if (header != null && header.startsWith("Bearer ")) {
-            token = header.substring(7);
-            username = jwtUtil.extractUsername(token);
+            token = header.substring(7).trim();
+            if (!token.isEmpty()) {
+                try {
+                    username = jwtUtil.extractUsername(token);
+                } catch (Exception e) {
+                    logger.warn("Malformed or invalid JWT token: {}", e.getMessage());
+                }
+            }
         }
 
         // Authenticate if valid

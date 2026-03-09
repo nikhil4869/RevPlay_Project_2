@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.auth.RegisterRequest;
+import com.example.demo.entity.User;
 import com.example.demo.service.AuthService;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.dto.auth.AuthRequest;
 import com.example.demo.dto.auth.AuthResponse;
+import com.example.demo.dto.auth.ForgotPasswordRequest;
 
 
 @RestController
@@ -24,11 +26,17 @@ public class AuthController {
     
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
-        String token = authService.login(
+        return authService.login(
                 request.getEmail(),
-                request.getPassword());
-
-        return new AuthResponse(token);
+                request.getPassword()
+        );
     }
+    
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        authService.resetPassword(request);
+        return "Password reset successful. You can login now.";
+    }
+
 
 }

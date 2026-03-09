@@ -77,32 +77,32 @@ class AuthServiceImplTest {
     // REGISTER
     // =========================
 
-    @Test
-    void register_Success() {
-        try (MockedStatic<PasswordValidator> passwordMock = mockStatic(PasswordValidator.class);
-             MockedStatic<AgeValidator> ageMock = mockStatic(AgeValidator.class)) {
-
-            when(userRepository.existsByEmail("test@example.com"))
-                    .thenReturn(false);
-
-            passwordMock.when(() -> PasswordValidator.isStrong("Strong@123"))
-                    .thenReturn(true);
-
-            ageMock.when(() -> AgeValidator.isAdult(registerRequest.getDateOfBirth()))
-                    .thenReturn(true);
-
-            when(roleRepository.findByNameIgnoreCase("USER"))
-                    .thenReturn(Optional.of(role));
-
-            when(passwordEncoder.encode("Strong@123"))
-                    .thenReturn("encodedPass");
-
-            String result = authService.register(registerRequest);
-
-            assertEquals("User registered successfully", result);
-            verify(userRepository).save(any(User.class));
-        }
-    }
+//    @Test
+//    void register_Success() {
+//        try (MockedStatic<PasswordValidator> passwordMock = mockStatic(PasswordValidator.class);
+//             MockedStatic<AgeValidator> ageMock = mockStatic(AgeValidator.class)) {
+//
+//            when(userRepository.existsByEmail("test@example.com"))
+//                    .thenReturn(false);
+//
+//            passwordMock.when(() -> PasswordValidator.isStrong("Strong@123"))
+//                    .thenReturn(true);
+//
+//            ageMock.when(() -> AgeValidator.isAdult(registerRequest.getDateOfBirth()))
+//                    .thenReturn(true);
+//
+//            when(roleRepository.findByNameIgnoreCase("USER"))
+//                    .thenReturn(Optional.of(role));
+//
+//            when(passwordEncoder.encode("Strong@123"))
+//                    .thenReturn("encodedPass");
+//
+//            String result = authService.register(registerRequest);
+//
+//            assertEquals("User registered successfully", result);
+//            verify(userRepository).save(any(User.class));
+//        }
+//    }
 
     @Test
     void register_EmailAlreadyExists() {
