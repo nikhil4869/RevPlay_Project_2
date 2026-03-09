@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevPlay - Dashboard</title>
+
+    <!-- Link to our modern user style -->
+    <link rel="stylesheet" th:href="@{/css/user-style.css}">
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="dark-theme">
+
+    <div class="layout-container">
+
+        <!-- Sidebar Fragment Integration -->
+        <div th:replace="~{fragments/user-sidebar :: userSidebar('dashboard')}"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <div class="content-scroll">
+
+                <!-- Top Section (Welcome & Navigation Buttons) -->
+                <header class="dashboard-header">
+                    <h1 class="welcome-text">Welcome, <span class="accent-text"
+                            th:text="${profile != null ? profile.name : 'User'}">User
+                            Name</span></h1>
+
+                    <div class="dashboard-nav-buttons">
+                        <a th:href="@{/user/songs}" class="btn-accent-outline nav-pill">
+                            <i class="fa-solid fa-music"></i> Songs
+                        </a>
+                        <a th:href="@{/user/albums}" class="btn-accent-outline nav-pill">
+                            <i class="fa-solid fa-compact-disc"></i> Albums
+                        </a>
+                        <a th:href="@{/user/playlists}" class="btn-accent-outline nav-pill">
+                            <i class="fa-solid fa-list"></i> Playlists
+                        </a>
+                        <a th:href="@{/user/favorites}" class="btn-accent-outline nav-pill">
+                            <i class="fa-solid fa-heart"></i> Favorites
+                        </a>
+                    </div>
+                </header>
+
+                <!-- Stats Section -->
+                <section class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper">
+                                <i class="fa-solid fa-heart accent-text"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" th:text="${dashboard != null ? dashboard.favorites : '0'}">0
+                                </div>
+                                <div class="stat-label">Favorites</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper">
+                                <i class="fa-solid fa-list accent-text"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" th:text="${dashboard != null ? dashboard.playlists : '0'}">0
+                                </div>
+                                <div class="stat-label">Playlists</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper">
+                                <i class="fa-solid fa-clock accent-text"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" th:text="${dashboard != null ? dashboard.listeningTime : '0'}">
+                                    0</div>
+                                <div class="stat-label">Listening Time</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recently Played Section -->
+                <section class="recently-played-section">
+                    <h2 class="section-title">Recently Played</h2>
+
+                    <div class="songs-grid">
+                        <div th:each="song : ${recentHistory}" class="song-card">
+                            <div class="song-cover-wrapper">
+                                <img th:src="${song.songCover != null ? (song.songCover.startsWith('http') ? song.songCover : 'http://localhost:8080' + song.songCover) : '/images/default-cover.png'}"
+                                    class="song-cover" alt="Album Cover">
+
+                                <button class="play-overlay-btn" th:data-song-id="${song.songId}"
+                                    th:data-song-title="${song.title}" th:data-song-artist="${song.artistName}"
+                                    th:data-song-file="${song.audioUrl}"
+                                    th:data-song-cover="${song.songCover != null ? (song.songCover.startsWith('http') ? song.songCover : 'http://localhost:8080' + song.songCover) : '/images/default-cover.png'}"
+                                    onclick="playSong(this)">
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+                            </div>
+
+                            <div class="song-details">
+                                <div class="song-card-header">
+                                    <h3 class="song-title" th:text="${song.title}">Song Title</h3>
+                                    <div class="song-options">
+                                        <button class="options-btn" onclick="toggleOptions(this, event)">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                        </button>
+                                        <div class="options-dropdown">
+                                            <button class="dropdown-item"
+                                                th:onclick="'addFavorite(' + ${song.songId} + ')'">
+                                                <i class="fa-regular fa-heart"></i> Add to Favorite
+                                            </button>
+                                            <button class="dropdown-item"
+                                                th:onclick="'showPlaylistModal(' + ${song.songId} + ')'">
+                                                <i class="fa-solid fa-list-plus"></i> Add to Playlist
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="song-artist" th:text="${song.artistName}">Artist Name</p>
+
+                                <div class="song-meta">
+                                    <span class="song-duration"
+                                        th:text="${song.playedAt != null ? #temporals.format(song.playedAt, 'dd MMM yyyy') : 'Recently'}">Recently</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Show empty state if list is empty -->
+                        <div th:if="${#lists.isEmpty(recentHistory)}" class="empty-state">
+                            <i class="fa-solid fa-music"></i>
+                            <p>No recently played songs.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Global Player Fragment Integration -->
+    <div th:replace="~{fragments/global-player :: globalPlayer}"></div>
+
+</body>
+
+</html>

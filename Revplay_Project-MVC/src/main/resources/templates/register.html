@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>RevPlay - Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h1>RevPlay</h1>
+        <div class="tagline">Join the Beat 🎵</div>
+
+        <p th:if="${error}" th:text="${error}" class="error"></p>
+        <p th:if="${success}" th:text="${success}" style="color: lightgreen;"></p>
+
+        <form id="registerForm" th:action="@{/register}" method="post" novalidate>
+            <div class="input-group">
+                <input type="text" id="name" name="name" placeholder="Full Name">
+                <small class="error-text" id="nameError"></small>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="Email">
+                <small class="error-text" id="emailError"></small>
+            </div>
+
+            <div class="input-group">
+                <input type="date" id="dateOfBirth" name="dateOfBirth">
+                <small class="error-text" id="dateOfBirthError"></small>
+            </div>
+
+            <div class="input-group" style="position: relative;">
+                <input type="password" id="password" name="password" placeholder="Password">
+                <span onclick="togglePassword('password')"
+                    style="position: absolute; right: 10px; top: 12px; cursor: pointer; color: gold;">
+                    👁
+                </span>
+                <small style="color: #888; font-size: 0.8em; display: block; margin-top: 5px;">
+                    Min 6 chars, 1 uppercase, 1 digit
+                </small>
+                <small class="error-text" id="passwordError"></small>
+            </div>
+
+            <div class="input-group" style="position: relative;">
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+                <span onclick="togglePassword('confirmPassword')"
+                    style="position: absolute; right: 10px; top: 12px; cursor: pointer; color: gold;">
+                    👁
+                </span>
+                <small class="error-text" id="confirmPasswordError"></small>
+            </div>
+
+            <div class="input-group">
+                <select id="role" name="role"
+                    style="width:100%; padding:12px; margin-bottom:15px; border-radius:6px; background:#2a2a2a; color:white; border:none;">
+                    <option value="">Select Role</option>
+                    <option value="USER">User</option>
+                    <option value="ARTIST">Artist</option>
+                </select>
+                <small class="error-text" id="roleError"></small>
+            </div>
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <div class="links">
+            <p>Already have an account? <a th:href="@{/login}">Login</a></p>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            field.type = field.type === "password" ? "text" : "password";
+        }
+
+        document.getElementById("registerForm").addEventListener("submit", function (event) {
+            let valid = true;
+            const fields = ["name", "email", "dateOfBirth", "password", "confirmPassword", "role"];
+            const errorMessages = {
+                "name": "Enter full name",
+                "email": "Enter valid email address",
+                "dateOfBirth": "Enter valid date of birth",
+                "password": "Enter password",
+                "confirmPassword": "Enter confirm password",
+                "role": "Select a role"
+            };
+
+            Object.keys(errorMessages).forEach(id => {
+                const input = document.getElementById(id);
+                const error = document.getElementById(id + "Error");
+                input.classList.remove("invalid");
+                error.innerText = "";
+
+                const value = input.value.trim();
+                if (!value) {
+                    input.classList.add("invalid");
+                    error.innerText = errorMessages[id];
+                    valid = false;
+                } else if (id === "email") {
+                    if (!value.includes("@")) {
+                        input.classList.add("invalid");
+                        error.innerText = "email should be with @";
+                        valid = false;
+                    } else if ((value.match(/@/g) || []).length > 1) {
+                        input.classList.add("invalid");
+                        error.innerText = "not valid email address";
+                        valid = false;
+                    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                        input.classList.add("invalid");
+                        error.innerText = "Enter a valid email format (e.g., name@example.com)";
+                        valid = false;
+                    }
+                } else if (id === "dateOfBirth") {
+                    const dob = new Date(value);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    if (dob >= today) {
+                        input.classList.add("invalid");
+                        error.innerText = "date is not valid";
+                        valid = false;
+                    } else {
+                        let age = today.getFullYear() - dob.getFullYear();
+                        const m = today.getMonth() - dob.getMonth();
+                        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                            age--;
+                        }
+
+                        if (age < 13) {
+                            input.classList.add("invalid");
+                            error.innerText = "age should not less than 13";
+                            valid = false;
+                        }
+                    }
+                }
+            });
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+
+        // Date picker optimization
+        const dobInput = document.getElementById("dateOfBirth");
+        const todayNow = new Date();
+        const maxDate = new Date(todayNow.getFullYear() - 13, todayNow.getMonth(), todayNow.getDate());
+        const minDate = new Date(todayNow.getFullYear() - 100, todayNow.getMonth(), todayNow.getDate());
+        dobInput.max = maxDate.toISOString().split("T")[0];
+        dobInput.min = minDate.toISOString().split("T")[0];
+
+        // Clear error on input
+        ["name", "email", "dateOfBirth", "password", "confirmPassword", "role"].forEach(id => {
+            document.getElementById(id).addEventListener("change", function () {
+                this.classList.remove("invalid");
+                document.getElementById(this.id + "Error").innerText = "";
+            });
+            document.getElementById(id).addEventListener("input", function () {
+                this.classList.remove("invalid");
+                document.getElementById(this.id + "Error").innerText = "";
+            });
+        });
+    </script>
+</body>
+
+</html>

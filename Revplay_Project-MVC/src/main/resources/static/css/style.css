@@ -1,0 +1,116 @@
+/* ===== Global Styling ===== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+/* ===== Login Card ===== */
+.login-container {
+    background: rgba(20, 20, 20, 0.9);
+    padding: 40px;
+    width: 350px;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+    text-align: center;
+}
+
+.login-container h1 {
+    color: gold;
+    margin-bottom: 5px;
+}
+
+.tagline {
+    font-size: 14px;
+    margin-bottom: 25px;
+    color: #ccc;
+}
+
+/* ===== Inputs ===== */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 6px;
+    background: #2a2a2a;
+    color: #fff;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid gold;
+}
+
+/* ===== Button ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: gold;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #d4af37;
+}
+
+/* ===== Links ===== */
+.links {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.links a {
+    color: gold;
+    text-decoration: none;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Error Message ===== */
+.error {
+    color: #ff4d4d;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+/* ===== Validation Styling ===== */
+.invalid {
+    border: 1px solid #ff4d4d !important;
+}
+
+.error-text {
+    color: #ff4d4d;
+    font-size: 12px;
+    display: block;
+    text-align: left;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

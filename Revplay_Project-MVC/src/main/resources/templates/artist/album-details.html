@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Album Details</title>
+
+    <style>
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: gray;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body style="background:#111; color:white; font-family:sans-serif;">
+
+    <div style="padding:40px;">
+
+        <!-- Back Button -->
+        <a th:href="@{/artist/albums}" class="back-link">
+            ← Back To Albums
+        </a>
+
+        <!-- Error Message -->
+        <p th:if="${param.error}" th:text="${param.error}"
+            style="color: #ff4d4d; background: rgba(255, 77, 77, 0.1); padding: 10px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #ff4d4d;">
+        </p>
+
+        <h1 th:text="${album.name}"></h1>
+        <p th:text="${album.description}"></p>
+
+        <img th:src="${'http://localhost:8080' + album.coverImage}"
+            style="width:250px; height:250px; object-fit:cover; border-radius:10px;">
+
+        <hr style="margin:30px 0;">
+
+        <h2>Songs 🎵</h2>
+
+        <div th:if="${#lists.isEmpty(songs)}">
+            <p>No songs in this album yet.</p>
+        </div>
+
+        <div th:each="song : ${songs}"
+            style="background:#1c1c1c; padding:12px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between;">
+
+            <div>
+                <b th:text="${song.title}"></b>
+                <span th:text="${song.duration}" style="color:gray;"></span>
+            </div>
+
+            <form th:action="@{'/artist/songs/' + ${song.id} + '/remove'}" method="post"
+                onsubmit="return confirm('Remove from album?');">
+
+                <input type="hidden" name="albumId" th:value="${album.id}" />
+
+                <button type="submit" style="background:none;border:none;color:red;cursor:pointer;">
+                    Remove
+                </button>
+            </form>
+
+        </div>
+
+        <br>
+
+        <div style="margin-top:20px; display:flex; gap:15px;">
+
+            <!-- Existing Songs Button -->
+            <a th:href="@{'/artist/albums/' + ${album.id} + '/add-existing'}"
+                style="background:#444; color:white; padding:10px 15px; text-decoration:none; border-radius:6px;">
+                + Add Existing Song To This Album
+            </a>
+
+            <!-- Upload New Song Button -->
+            <a th:href="@{'/artist/albums/' + ${album.id} + '/upload'}"
+                style="background:gold; color:black; padding:10px 15px; text-decoration:none; border-radius:6px;">
+                + Upload New Song To This Album
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

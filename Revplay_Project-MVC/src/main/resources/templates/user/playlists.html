@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevPlay - Playlists</title>
+    <link rel="stylesheet" th:href="@{/css/user-style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="dark-theme">
+    <div class="layout-container">
+        <div th:replace="~{fragments/user-sidebar :: userSidebar('playlist')}"></div>
+        <main class="main-content">
+            <div class="content-scroll">
+                <div class="header-search-filter-row">
+                    <div class="filters-container">
+                        <div class="filter-dropdown">
+                            <button class="filter-btn">
+                                <i class="fa-solid fa-eye"></i> View: <span th:text="${pageTitle}">My Playlists</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-menu">
+                                <a th:href="@{/user/playlists(type='my')}" class="filter-item">My Playlists</a>
+                                <a th:href="@{/user/playlists(type='public')}" class="filter-item">Public Playlists</a>
+                                <a th:href="@{/user/playlists(type='followed')}" class="filter-item">Followed
+                                    Playlists</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="back-to-all-btn create-playlist-trigger">
+                        <i class="fa-solid fa-plus"></i> Create Playlist
+                    </button>
+                </div>
+
+                <h1 class="page-title" th:text="${pageTitle}">My Playlists</h1>
+
+                <!-- Error Message Display -->
+                <div th:if="${errorMessage}" class="alert alert-danger"
+                    style="background: rgba(255, 0, 0, 0.1); color: #ff4d4d; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ff4d4d;">
+                    <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${errorMessage}">Error Message</span>
+                </div>
+
+                <div class="albums-grid">
+                    <div th:each="playlist : ${playlists}" class="song-card">
+                        <div class="song-cover-wrapper clickable-playlist"
+                            th:data-url="@{/user/playlists/{id}/songs(id=${playlist.id})}">
+                            <div class="playlist-placeholder">
+                                <i class="fa-solid fa-music placeholder-icon"></i>
+                                <span class="placeholder-text" th:text="${playlist.name}">Playlist Name</span>
+                            </div>
+                        </div>
+                        <div class="song-details">
+                            <div class="song-card-header">
+                                <h3 class="song-title" th:text="${playlist.name}">Playlist Name</h3>
+                                <div class="song-options">
+                                    <button class="options-btn">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                    <div class="options-dropdown">
+                                        <!-- Delete for owner -->
+                                        <form th:if="${type == 'my'}"
+                                            th:action="@{/user/playlists/{id}/delete(id=${playlist.id})}" method="POST"
+                                            style="display:inline;">
+                                            <button type="submit" class="dropdown-item" style="color: #ff4444;">
+                                                <i class="fa-solid fa-trash"></i> Delete
+                                            </button>
+                                        </form>
+
+                                        <!-- Follow/Unfollow toggle for public view -->
+                                        <th:block th:if="${type == 'public'}">
+                                            <form th:if="${playlist.followedStatus}"
+                                                th:action="@{/user/playlists/{id}/unfollow(id=${playlist.id})}"
+                                                method="POST" style="display:inline;">
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="fa-solid fa-minus"></i> Unfollow
+                                                </button>
+                                            </form>
+                                            <form th:if="${!playlist.followedStatus}"
+                                                th:action="@{/user/playlists/{id}/follow(id=${playlist.id})}"
+                                                method="POST" style="display:inline;">
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="fa-solid fa-plus"></i> Follow
+                                                </button>
+                                            </form>
+                                        </th:block>
+
+                                        <!-- Unfollow for followed -->
+                                        <form th:if="${type == 'followed'}"
+                                            th:action="@{/user/playlists/{id}/unfollow(id=${playlist.id})}"
+                                            method="POST" style="display:inline;">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="fa-solid fa-minus"></i> Unfollow
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="song-artist" th:text="${playlist.description}">Description</p>
+                            <div class="song-meta">
+                                <span class="song-duration">
+                                    <i class="fa-solid fa-user"></i> <span th:text="${playlist.ownerName}">Owner</span>
+                                    <span th:if="${playlist.isPublic}" class="badge-public"
+                                        style="margin-left:8px; font-size:10px; color:var(--accent-yellow);">PUBLIC</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Playlist Modal (AJAX compatible) -->
+            <div id="createPlaylistModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Create New Playlist</h2>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{/user/playlists/create}" method="POST" class="auth-form">
+                            <div class="form-group">
+                                <label>Playlist Name</label>
+                                <input type="text" name="name" required placeholder="My Awesome Playlist"
+                                    class="search-input" style="padding-left:16px;">
+                            </div>
+                            <div class="form-group" style="margin-top:16px;">
+                                <label>Description</label>
+                                <textarea name="description" placeholder="A collection of my favorite tracks"
+                                    class="search-input" style="padding-left:16px; min-height:80px;"></textarea>
+                            </div>
+                            <div class="form-group"
+                                style="margin-top:16px; display:flex; align-items:center; gap:10px;">
+                                <input type="checkbox" name="isPublic" id="isPublicCheckbox">
+                                <label for="isPublicCheckbox" style="margin:0;">Make Public</label>
+                            </div>
+                            <button type="submit" class="logout-btn"
+                                style="margin-top:24px; background:var(--accent-yellow); color:black; border:none; width:100%;">
+                                Create Playlist
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Create Playlist Modal Removed from here -->
+
+    <div th:replace="~{fragments/global-player :: globalPlayer}"></div>
+
+    <!-- Dynamic scripts moved inside main-content for AJAX support -->
+</body>
+
+</html>

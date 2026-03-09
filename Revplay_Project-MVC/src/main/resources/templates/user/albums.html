@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevPlay - Albums</title>
+    <link rel="stylesheet" th:href="@{/css/user-style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="dark-theme">
+    <div class="layout-container">
+        <div th:replace="~{fragments/user-sidebar :: userSidebar('albums')}"></div>
+        <main class="main-content">
+            <div class="content-scroll">
+                <h1 class="page-title">Albums</h1>
+                <div class="albums-grid">
+                    <a th:each="album : ${albums}" th:href="@{/user/albums/{id}/songs(id=${album.id})}"
+                        class="album-card-small">
+                        <div class="song-cover-wrapper">
+                            <img th:src="${album.coverImage != null ? (album.coverImage.startsWith('http') ? album.coverImage : 'http://localhost:8080' + album.coverImage) : '/images/default-cover.png'}"
+                                class="song-cover" alt="Album Cover">
+                        </div>
+                        <div class="song-details">
+                            <h3 class="song-title" th:text="${album.name}">Album Name</h3>
+                            <p class="song-artist" th:text="${album.artistName}">Artist Name</p>
+                            <div class="song-meta">
+                                <span class="song-duration"
+                                    th:text="${#temporals.format(album.releaseDate, 'yyyy')}">2023</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div th:if="${#lists.isEmpty(albums)}" class="empty-state">
+                        <i class="fa-solid fa-compact-disc"></i>
+                        <p>No albums found.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/global-player :: globalPlayer}"></div>
+</body>
+
+</html>

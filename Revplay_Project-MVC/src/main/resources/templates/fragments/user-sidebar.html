@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+   <div th:fragment="userSidebar(activePage)">
+
+      <div class="sidebar">
+         <div>
+            <div class="logo">RevPlay 🎵</div>
+
+            <div class="nav-section">
+               <a th:href="@{/user/dashboard}"
+                  th:class="${activePage == 'dashboard'} ? 'nav-link active' : 'nav-link inactive'">
+                  <i class="fa-solid fa-house"></i> Dashboard
+               </a>
+
+               <a th:href="@{/user/songs}"
+                  th:class="${activePage == 'songs'} ? 'nav-link active' : 'nav-link inactive'">
+                  <i class="fa-solid fa-music"></i> Songs
+               </a>
+
+               <a th:href="@{/user/albums}"
+                  th:class="${activePage == 'albums'} ? 'nav-link active' : 'nav-link inactive'">
+                  <i class="fa-solid fa-compact-disc"></i> Albums
+               </a>
+
+               <a th:href="@{/user/playlists}"
+                  th:class="${activePage == 'playlist'} ? 'nav-link active' : 'nav-link inactive'">
+                  <i class="fa-solid fa-list"></i> Playlist
+               </a>
+
+               <a th:href="@{/user/favorites}"
+                  th:class="${activePage == 'favorites'} ? 'nav-link active' : 'nav-link inactive'">
+                  <i class="fa-solid fa-heart"></i> Favourites
+               </a>
+
+               <a th:href="@{/user/profile}"
+                  th:class="${activePage == 'profile'} ? 'nav-link active' : 'nav-link inactive'">
+                  <i class="fa-solid fa-user"></i> Profile
+               </a>
+
+               <a th:href="@{/user/analytics}"
+                  th:class="${activePage == 'analytics'} ? 'nav-link active' : 'nav-link inactive'">
+                  <i class="fa-solid fa-chart-line"></i> Analytics
+               </a>
+            </div>
+         </div>
+
+         <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-btn">
+               Logout
+            </button>
+         </form>
+
+         <!-- Close Button for Mobile -->
+         <button class="menu-close" onclick="toggleUserMenu()"
+            style="display: none; position: absolute; top: 20px; right: 20px; background: none; border: none; color: gold; font-size: 30px; cursor: pointer;">&times;</button>
+      </div>
+
+      <!-- Hamburger Toggle Button -->
+      <button class="mobile-toggle" onclick="toggleUserMenu()">
+         <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <!-- Sidebar Overlay -->
+      <div class="sidebar-overlay" onclick="toggleUserMenu()"></div>
+
+      <script>
+         function toggleUserMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+         }
+      </script>
+
+   </div>
+
+</body>
+
+</html>

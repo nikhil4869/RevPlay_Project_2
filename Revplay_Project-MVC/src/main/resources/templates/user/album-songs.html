@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevPlay - Album Songs</title>
+
+    <!-- Link to our modern user style -->
+    <link rel="stylesheet" th:href="@{/css/user-style.css}">
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="dark-theme">
+
+    <div class="layout-container">
+
+        <!-- Sidebar Fragment Integration -->
+        <div th:replace="~{fragments/user-sidebar :: userSidebar('albums')}"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <div class="content-scroll">
+
+                <!-- Navigation -->
+                <div class="nav-back-container">
+                    <a th:href="@{/user/albums}" class="back-btn">
+                        <i class="fa-solid fa-arrow-left"></i> Back to Albums
+                    </a>
+                </div>
+
+                <!-- Album Detail Header -->
+                <div class="album-detail-header" th:if="${album != null}">
+                    <div class="album-detail-cover">
+                        <img th:src="${album.coverImage != null ? (album.coverImage.startsWith('http') ? album.coverImage : 'http://localhost:8080' + album.coverImage) : '/images/default-cover.png'}"
+                            alt="Album Cover">
+                    </div>
+                    <div class="album-detail-info">
+                        <span class="type-caps">ALBUM</span>
+                        <h1 class="album-title-large" th:text="${album.name}">Album Name</h1>
+                        <p class="album-desc" th:text="${album.description}">Album Description</p>
+                        <div class="album-meta-info">
+                            <span class="album-release-date"
+                                th:text="${#temporals.format(album.releaseDate, 'yyyy')}">2023</span>
+                            <span class="album-song-count" th:text="${#lists.size(songs)} + ' songs'">0 songs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="songs-grid">
+                    <!-- Iterating over ${songs} list -->
+                    <div th:each="song : ${songs}" class="song-card">
+                        <div class="song-cover-wrapper">
+                            <img th:src="${song.coverUrl != null ? (song.coverUrl.startsWith('http') ? song.coverUrl : 'http://localhost:8080' + song.coverUrl) : '/images/default-cover.png'}"
+                                class="song-cover" alt="Album Cover">
+
+                            <button class="play-overlay-btn" th:data-song-id="${song.id}"
+                                th:data-song-title="${song.title}" th:data-song-artist="${song.artistName}"
+                                th:data-song-file="${song.audioUrl}"
+                                th:data-song-cover="${song.coverUrl != null ? (song.coverUrl.startsWith('http') ? song.coverUrl : 'http://localhost:8080' + song.coverUrl) : '/images/default-cover.png'}"
+                                onclick="playSong(this)">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+
+                        <div class="song-details">
+                            <div class="song-card-header">
+                                <h3 class="song-title" th:text="${song.title}">Song Title</h3>
+                                <div class="song-options">
+                                    <button class="options-btn" onclick="toggleOptions(this, event)">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                    <div class="options-dropdown">
+                                        <button class="dropdown-item" th:onclick="'addFavorite(' + ${song.id} + ')'">
+                                            <i class="fa-regular fa-heart"></i> Add to Favorite
+                                        </button>
+                                        <button class="dropdown-item"
+                                            th:onclick="'showPlaylistModal(' + ${song.id} + ')'">
+                                            <i class="fa-solid fa-list-plus"></i> Add to Playlist
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="song-artist" th:text="${song.artistName}">Artist Name</p>
+
+                            <div class="song-meta">
+                                <span class="song-duration"
+                                    th:text="${song.duration != null ? song.duration : '3:45'}">3:45</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(songs)}" class="empty-state">
+                        <i class="fa-solid fa-music"></i>
+                        <p>No songs found in this album.</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Global Player Fragment Integration -->
+    <div th:replace="~{fragments/global-player :: globalPlayer}"></div>
+
+</body>
+
+</html>

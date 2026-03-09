@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevPlay - Profile</title>
+    <link rel="stylesheet" th:href="@{/css/user-style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="dark-theme">
+    <div class="layout-container">
+        <div th:replace="~{fragments/user-sidebar :: userSidebar('profile')}"></div>
+        <main class="main-content">
+            <div class="content-scroll">
+                <h1 class="page-title">User Profile</h1>
+
+                <div class="profile-container">
+
+                    <!-- Status Messages -->
+                    <div th:if="${successMessage}" class="alert-profile alert-success">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span th:text="${successMessage}">Success!</span>
+                    </div>
+                    <div th:if="${errorMessage}" class="alert-profile alert-error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span th:text="${errorMessage}">Error!</span>
+                    </div>
+
+                    <div class="profile-header-view">
+                        <div class="profile-avatar-large" onclick="document.getElementById('imageInput').click()"
+                            title="Change Profile Image">
+                            <img th:if="${profile.profileImage != null}" th:src="${profile.profileImage}"
+                                alt="Profile Image">
+                            <i th:if="${profile.profileImage == null}" class="fa-solid fa-user profile-icon"></i>
+                            <div class="profile-image-overlay">
+                                <i class="fa-solid fa-camera"></i><br>Change
+                            </div>
+                        </div>
+                        <div class="profile-info-large">
+                            <div style="display: flex; align-items: center;">
+                                <h2 class="profile-name-large" th:text="${profile.name}">User Name</h2>
+                                <button class="profile-edit-toggle" onclick="toggleEditSection()" title="Edit Profile">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </button>
+                            </div>
+                            <p class="profile-email-large" th:text="${profile.email}">user@example.com</p>
+                            <p class="profile-bio-large"
+                                th:text="${profile.bio != null && !profile.bio.isEmpty() ? profile.bio : 'No bio available.'}">
+                                User bio...</p>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Image Upload Form -->
+                    <form id="imageForm" th:action="@{/user/profile/image}" method="POST" enctype="multipart/form-data"
+                        style="display:none;">
+                        <input type="file" id="imageInput" name="image"
+                            onchange="document.getElementById('imageForm').submit()">
+                    </form>
+
+                    <!-- Profile Edit Section (Toggleable) -->
+                    <div id="editSection" class="profile-management-card management-card-hidden">
+                        <h3 class="profile-section-title">
+                            <i class="fa-solid fa-user-pen"></i> Edit Profile
+                        </h3>
+                        <form th:action="@{/user/profile/update}" method="POST">
+                            <div class="form-group">
+                                <label for="name">Display Name</label>
+                                <input type="text" id="name" name="name" class="form-control" th:value="${profile.name}"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bio">Bio</label>
+                                <textarea id="bio" name="bio" class="form-control" rows="4" th:text="${profile.bio}"
+                                    placeholder="Tell us about yourself..."></textarea>
+                            </div>
+                            <div style="display: flex; gap: 12px;">
+                                <button type="submit" class="btn-profile btn-save">
+                                    <i class="fa-solid fa-save"></i> Save Changes
+                                </button>
+                                <button type="button" class="btn-profile" onclick="toggleEditSection()"
+                                    style="background: rgba(255,255,255,0.1); color: white;">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Account Deactivation Section -->
+                    <div class="profile-management-card" style="border-top: 2px solid #ff4444;">
+                        <h3 class="profile-section-title" style="color: #ff4444;">
+                            <i class="fa-solid fa-user-slash"></i> Danger Zone
+                        </h3>
+                        <div class="deactivate-info">
+                            Deactivating your account will disable your profile and hide your playlists.
+                            You can reactivate your account at any time by using the <strong>Forgot Password</strong>
+                            feature during login.
+                        </div>
+                        <form id="deactivateForm" th:action="@{/user/profile/deactivate}" method="POST"
+                            onsubmit="return confirmDeactivation()">
+                            <button type="submit" class="btn-profile btn-deactivate">
+                                <i class="fa-solid fa-trash-can"></i> Deactivate Account
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{fragments/global-player :: globalPlayer}"></div>
+
+    <script th:inline="javascript">
+        function toggleEditSection() {
+            const section = document.getElementById('editSection');
+            section.classList.toggle('management-card-visible');
+        }
+
+        function confirmDeactivation() {
+            return confirm("Are you sure you want to deactivate your account?\n\nYou will be logged out, but you can reactivate later via Password Reset.");
+        }
+
+        /* Auto-show edit if there was an error message in this session */
+        window.addEventListener('load', () => {
+            const error = [[${ errorMessage }]];
+            if (error && error.includes('updating')) {
+                toggleEditSection();
+            }
+        });
+    </script>
+</body>
+
+</html>

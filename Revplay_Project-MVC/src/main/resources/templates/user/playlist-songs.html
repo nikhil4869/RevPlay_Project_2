@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevPlay - Playlist Songs</title>
+    <link rel="stylesheet" th:href="@{/css/user-style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="dark-theme">
+
+    <div class="layout-container">
+        <div th:replace="~{fragments/user-sidebar :: userSidebar('playlist')}"></div>
+
+        <main class="main-content">
+            <div class="content-scroll">
+                <!-- Navigation -->
+                <div class="nav-back-container"
+                    style="display:flex; justify-content:space-between; align-items:center;">
+                    <a th:href="@{/user/playlists}" class="back-btn">
+                        <i class="fa-solid fa-arrow-left"></i> Back to Playlists
+                    </a>
+
+                    <a th:if="${!isAddView}" th:href="@{/user/playlists/{id}/add-songs(id=${playlistId})}"
+                        class="back-to-all-btn">
+                        <i class="fa-solid fa-plus"></i> Add Songs
+                    </a>
+                    <a th:if="${isAddView}" th:href="@{/user/playlists/{id}/songs(id=${playlistId})}"
+                        class="back-to-all-btn">
+                        <i class="fa-solid fa-check"></i> Done Adding
+                    </a>
+                </div>
+
+                <h1 class="page-title" th:text="${isAddView ? 'Add Songs to Playlist' : 'Playlist Songs'}">Playlist
+                    Songs</h1>
+
+                <div class="songs-grid">
+                    <div th:each="song : ${songs}" class="song-card">
+                        <div class="song-cover-wrapper">
+                            <img th:src="${song.coverUrl != null ? (song.coverUrl.startsWith('http') ? song.coverUrl : 'http://localhost:8080' + song.coverUrl) : '/images/default-cover.png'}"
+                                class="song-cover" alt="Song Cover">
+
+                            <!-- Play for normal view, Add for add view -->
+                            <button th:if="${!isAddView}" class="play-overlay-btn" th:data-song-id="${song.id}"
+                                th:data-song-title="${song.title}" th:data-song-artist="${song.artistName}"
+                                th:data-song-file="${song.audioUrl}"
+                                th:data-song-cover="${song.coverUrl != null ? (song.coverUrl.startsWith('http') ? song.coverUrl : 'http://localhost:8080' + song.coverUrl) : '/images/default-cover.png'}"
+                                onclick="playSong(this)">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+
+                            <button th:if="${isAddView}" class="play-overlay-btn"
+                                th:onclick="'addSongToPlaylist(' + ${playlistId} + ',' + ${song.id} + ')'"
+                                style="opacity:1; transform:translateY(0);">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <div class="song-details">
+                            <div class="song-card-header">
+                                <h3 class="song-title" th:text="${song.title}">Song Title</h3>
+                                <div class="song-options" th:if="${!isAddView}">
+                                    <button class="options-btn" onclick="toggleOptions(this, event)">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                    <div class="options-dropdown">
+                                        <form
+                                            th:action="@{/user/playlists/{pId}/songs/{sId}/remove(pId=${playlistId}, sId=${song.id})}"
+                                            method="POST">
+                                            <button type="submit" class="dropdown-item" style="color:#ff4444;">
+                                                <i class="fa-solid fa-trash"></i> Remove from Playlist
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="song-artist" th:text="${song.artistName}">Artist Name</p>
+                        </div>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(songs)}" class="empty-state">
+                        <i class="fa-solid fa-music"></i>
+                        <p
+                            th:text="${isAddView ? 'No more songs available to add.' : 'No songs available in this playlist.'}">
+                            No songs available.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div th:replace="~{fragments/global-player :: globalPlayer}"></div>
+
+    <script>
+        function toggleOptions(btn, event) {
+            event.stopPropagation();
+            const dropdown = btn.nextElementSibling;
+            document.querySelectorAll('.options-dropdown').forEach(d => {
+                if (d !== dropdown) d.classList.remove('show');
+            });
+            dropdown.classList.toggle('show');
+        }
+
+        document.addEventListener('click', function () {
+            document.querySelectorAll('.options-dropdown').forEach(m => {
+                m.classList.remove('show');
+            });
+        });
+
+        function addSongToPlaylist(playlistId, songId) {
+            fetch(`/api/proxy/playlists/${playlistId}/songs/${songId}`, {
+                method: 'PUT'
+            }).then(response => {
+                if (response.ok) {
+                    alert('Song added successfully');
+                } else {
+                    alert('Failed to add song or song already exists');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

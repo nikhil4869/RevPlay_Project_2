@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>My Albums</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		.layout {
+			display: flex;
+			min-height: 100vh;
+			background: #111;
+		}
+
+		.content {
+			flex: 1;
+			padding: 40px;
+		}
+
+		.albums-grid {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 25px;
+			margin-top: 30px;
+		}
+
+		.album-card {
+			width: 240px;
+			background: #1c1c1c;
+			border-radius: 12px;
+			overflow: hidden;
+			position: relative;
+			transition: transform 0.2s;
+		}
+
+		.album-card:hover {
+			transform: translateY(-5px);
+		}
+
+		@media (max-width: 768px) {
+			.layout {
+				flex-direction: column;
+			}
+
+			.content {
+				padding: 20px;
+				padding-top: 80px;
+				/* Space for mobile toggle */
+			}
+
+			.albums-grid {
+				justify-content: center;
+				gap: 15px;
+			}
+
+			.album-card {
+				width: 100%;
+				max-width: 300px;
+			}
+
+			.header-row {
+				flex-direction: column;
+				gap: 15px;
+				text-align: center;
+			}
+		}
+	</style>
+</head>
+
+<body style="background:#111; color:white; margin:0;">
+
+	<div class="layout">
+		<!-- Sidebar -->
+		<div th:replace="fragments/sidebar :: artistSidebar('albums')"></div>
+
+		<!-- Content -->
+		<div class="content">
+
+			<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
+				<h1 style="margin:0;">My Albums 🎼</h1>
+
+				<a th:href="@{/artist/albums/create}"
+					style="background:gold; color:black; padding:10px 20px; text-decoration:none; border-radius:8px; font-weight:bold; transition: 0.2s;"
+					onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+					+ Create Album
+				</a>
+			</div>
+
+			<div class="filters-row"
+				style="display:flex; align-items:center; margin-bottom: 35px; background: #181818; padding: 15px 20px; border-radius: 12px; border: 1px solid #333;">
+				<div class="search-box" style="position:relative; max-width: 500px; flex: 1;">
+					<i class="fa-solid fa-magnifying-glass"
+						style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#888;"></i>
+					<input type="text" id="albumSearch" placeholder="Search albums by name..."
+						style="width:100%; padding:12px 12px 12px 40px; border-radius:10px; border:1px solid #444; background:#0a0a0a; color:white; outline:none; transition: all 0.3s ease;"
+						onfocus="this.style.borderColor='gold'; this.style.boxShadow='0 0 10px rgba(255,215,0,0.2)'"
+						onblur="this.style.borderColor='#444'; this.style.boxShadow='none'">
+				</div>
+				<div style="flex: 1;"></div> <!-- Spacer -->
+			</div>
+
+			<div id="noResults"
+				style="display:none; text-align:center; padding: 60px; color:#666; background: #181818; border-radius: 15px; border: 1px dashed #333;">
+				<i class="fa-solid fa-face-frown" style="font-size: 56px; margin-bottom: 15px; display: block;"></i>
+				<h3 style="color:#aaa;">No albums found</h3>
+				<p>Try searching for a different album name.</p>
+			</div>
+
+			<div th:if="${#lists.isEmpty(albums)}" style="margin-top:40px;">
+				<p>No albums yet. Start your music journey!</p>
+			</div>
+
+			<div class="albums-grid">
+
+				<div th:each="album : ${albums}" class="album-card" th:data-name="${#strings.toLowerCase(album.name)}">
+
+					<!-- 3 DOT BUTTON -->
+					<div style="position:absolute; top:10px; right:10px;">
+						<button th:onclick="'toggleMenu(' + ${album.id} + ')'"
+							style="background:none;border:none;color:white;font-size:18px;cursor:pointer;">
+							⋮
+						</button>
+
+						<div th:id="'menu-' + ${album.id}" style="display:none; position:absolute; right:0; background:#222;
+		                    border-radius:8px; padding:8px; min-width:140px;">
+
+							<a th:href="@{'/artist/albums/' + ${album.id} + '/edit'}"
+								style="display:block; color:white; padding:6px; text-decoration:none;">
+								✏ Edit
+							</a>
+
+							<a th:href="@{'/artist/albums/' + ${album.id} + '/cover'}"
+								style="display:block; color:white; padding:6px; text-decoration:none;">
+								🖼 Edit Cover
+							</a>
+
+							<form th:action="@{'/artist/albums/' + ${album.id} + '/delete'}" method="post"
+								onsubmit="return confirm('Delete this album?');">
+
+								<button type="submit"
+									style="background:none;border:none;color:red;padding:6px;cursor:pointer;width:100%;text-align:left;">
+									🗑 Delete
+								</button>
+							</form>
+
+						</div>
+					</div>
+
+					<!-- COVER -->
+					<a th:href="@{'/artist/albums/' + ${album.id}}">
+						<img th:src="${'http://localhost:8080' + album.coverImage}"
+							style="width:100%; height:180px; object-fit:cover;">
+					</a>
+
+					<!-- DETAILS -->
+					<div style="padding:15px;">
+						<h3 th:text="${album.name}" style="margin:0;"></h3>
+						<p th:text="${album.releaseDate}" style="color:gray; font-size:14px;"></p>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<script>
+		function toggleMenu(id) {
+			let menu = document.getElementById("menu-" + id);
+
+			// close all menus first
+			document.querySelectorAll("[id^='menu-']").forEach(m => {
+				if (m !== menu) m.style.display = "none";
+			});
+
+			menu.style.display = (menu.style.display === "block") ? "none" : "block";
+		}
+
+		document.addEventListener("click", function (event) {
+			if (!event.target.closest("button")) {
+				document.querySelectorAll("[id^='menu-']").forEach(m => {
+					m.style.display = "none";
+				});
+			}
+		});
+
+		/* SEARCH LOGIC */
+		const albumSearch = document.getElementById("albumSearch");
+		const albumCards = document.querySelectorAll(".album-card");
+		const noResults = document.getElementById("noResults");
+		const albumsGrid = document.querySelector(".albums-grid");
+
+		albumSearch.addEventListener("input", function () {
+			const query = this.value.toLowerCase().trim();
+			let hasVisibleCards = false;
+
+			albumCards.forEach(card => {
+				const name = card.getAttribute("data-name");
+
+				if (name.includes(query)) {
+					card.style.display = "block";
+					hasVisibleCards = true;
+				} else {
+					card.style.display = "none";
+				}
+			});
+
+			if (hasVisibleCards) {
+				noResults.style.display = "none";
+				albumsGrid.style.display = "flex";
+			} else {
+				noResults.style.display = "block";
+				albumsGrid.style.display = "none";
+			}
+		});
+	</script>
+</body>
+
+</html>

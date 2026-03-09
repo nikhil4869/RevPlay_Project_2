@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>RevPlay - Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h1>RevPlay</h1>
+        <div class="tagline">Feel the Beat 🎵</div>
+
+        <p th:if="${error}" th:text="${error}" class="error"></p>
+        <p th:if="${success}" th:text="${success}" style="color: lightgreen;"></p>
+
+        <form id="loginForm" th:action="@{/login}" method="post" novalidate>
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="Email">
+                <small class="error-text" id="emailError"></small>
+            </div>
+            <div class="input-group" style="position: relative;">
+                <input type="password" id="password" name="password" placeholder="Password">
+                <span onclick="togglePassword()"
+                    style="position: absolute; right: 10px; top: 12px; cursor: pointer; color: gold;">
+                    👁
+                </span>
+                <small class="error-text" id="passwordError"></small>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="links">
+            <p><a th:href="@{/forgot-password}">Forgot Password?</a></p>
+            <p>New to RevPlay? <a th:href="@{/register}">Create Account</a></p>
+        </div>
+    </div>
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById("password");
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        }
+
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            let valid = true;
+            const email = document.getElementById("email");
+            const password = document.getElementById("password");
+
+            // Reset errors
+            [email, password].forEach(input => {
+                input.classList.remove("invalid");
+                document.getElementById(input.id + "Error").innerText = "";
+            });
+
+            const emailValue = email.value.trim();
+            if (!emailValue) {
+                email.classList.add("invalid");
+                document.getElementById("emailError").innerText = "Enter valid email address";
+                valid = false;
+            } else if (!emailValue.includes("@")) {
+                email.classList.add("invalid");
+                document.getElementById("emailError").innerText = "email should be with @";
+                valid = false;
+            } else if ((emailValue.match(/@/g) || []).length > 1) {
+                email.classList.add("invalid");
+                document.getElementById("emailError").innerText = "not valid email address";
+                valid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+                email.classList.add("invalid");
+                document.getElementById("emailError").innerText = "Enter a valid email format (e.g., name@example.com)";
+                valid = false;
+            }
+
+            if (!password.value.trim()) {
+                password.classList.add("invalid");
+                document.getElementById("passwordError").innerText = "Enter password";
+                valid = false;
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+
+        // Clear error on input
+        ["email", "password"].forEach(id => {
+            document.getElementById(id).addEventListener("input", function () {
+                this.classList.remove("invalid");
+                document.getElementById(this.id + "Error").innerText = "";
+            });
+        });
+    </script>
+</body>
+
+</html>

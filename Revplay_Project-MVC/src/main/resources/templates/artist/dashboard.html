@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>RevPlay - Artist</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body style="display:flex; background:#111; color:white; margin:0;">
+
+    <!-- Sidebar -->
+    <div th:replace="fragments/sidebar :: artistSidebar('dashboard')"></div>
+
+    <!-- Content -->
+    <div style="flex:1; padding:30px;">
+        <h1>Welcome, Artist 🎤</h1>
+        <p>Manage your music, albums, and track performance.</p>
+    </div>
+
+</body>
+
+</html>

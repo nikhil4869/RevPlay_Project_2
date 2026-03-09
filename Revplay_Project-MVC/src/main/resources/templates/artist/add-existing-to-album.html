@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Select Existing Song - RevPlay</title>
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+			color: white;
+			font-family: 'Segoe UI', sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 100vh;
+		}
+
+		.container {
+			width: 500px;
+			background: #181818;
+			padding: 40px;
+			border-radius: 20px;
+			box-shadow: 0 0 60px rgba(255, 215, 0, 0.08), 0 15px 40px rgba(0, 0, 0, 0.6);
+		}
+
+		h2 {
+			text-align: center;
+			margin-bottom: 30px;
+			color: gold;
+			font-weight: 600;
+		}
+
+		.song-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: #242424;
+			padding: 14px 18px;
+			border-radius: 10px;
+			margin-bottom: 12px;
+			transition: 0.2s ease;
+		}
+
+		.song-row:hover {
+			background: #2d2d2d;
+			transform: translateX(4px);
+		}
+
+		.song-title {
+			font-size: 14px;
+			color: #ddd;
+		}
+
+		.add-btn {
+			background: gold;
+			color: black;
+			border: none;
+			padding: 6px 14px;
+			border-radius: 20px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: 0.2s ease;
+		}
+
+		.add-btn:hover {
+			background: #ffcc00;
+			transform: scale(1.05);
+		}
+
+		.empty-text {
+			text-align: center;
+			color: gray;
+			margin-top: 10px;
+		}
+
+		.back-link {
+			display: block;
+			text-align: center;
+			margin-top: 25px;
+			color: gray;
+			text-decoration: none;
+			font-size: 14px;
+		}
+
+		.back-link:hover {
+			color: white;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="container">
+
+		<h2>🎵 Select Existing Song</h2>
+
+		<div th:if="${#lists.isEmpty(songs)}" class="empty-text">No
+			songs available to add.</div>
+
+		<div th:each="song : ${songs}" class="song-row">
+
+			<div class="song-title" th:text="${song.title}"></div>
+
+			<form th:action="@{'/artist/albums/' + ${albumId} + '/assign-song'}" method="post">
+
+				<input type="hidden" name="songId" th:value="${song.id}" />
+				<input type="hidden" name="trackNumber" value="1" />
+
+				<button type="submit" class="add-btn">+ Add</button>
+
+			</form>
+
+		</div>
+
+		<a th:href="@{'/artist/albums/' + ${albumId}}" class="back-link">
+			← Back To Album </a>
+
+	</div>
+
+</body>
+
+</html>
