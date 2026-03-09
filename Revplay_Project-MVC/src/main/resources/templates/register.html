@@ -143,12 +143,13 @@
             }
         });
 
-        // Date picker optimization
+        // Date picker optimization - Allow seeing current year but validate age later
         const dobInput = document.getElementById("dateOfBirth");
         const todayNow = new Date();
-        const maxDate = new Date(todayNow.getFullYear() - 13, todayNow.getMonth(), todayNow.getDate());
         const minDate = new Date(todayNow.getFullYear() - 100, todayNow.getMonth(), todayNow.getDate());
-        dobInput.max = maxDate.toISOString().split("T")[0];
+
+        // Setting max to today allows the browser calendar to show up to 2026
+        dobInput.max = todayNow.toISOString().split("T")[0];
         dobInput.min = minDate.toISOString().split("T")[0];
 
         // Clear error on input
