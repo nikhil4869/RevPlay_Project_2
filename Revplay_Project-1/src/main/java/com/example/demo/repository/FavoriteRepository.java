@@ -18,6 +18,8 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     long countBySong(Song song);
     
     long countByUser(User user);
+    
+    void deleteBySong(Song song);
 
     @Query("SELECT COUNT(f) FROM Favorite f WHERE f.song.artist = :artist")
     long countBySongArtist(@org.springframework.data.repository.query.Param("artist") User artist);

@@ -88,6 +88,9 @@ class AuthServiceImplTest {
             passwordMock.when(() -> PasswordValidator.isStrong("Strong@123"))
                     .thenReturn(true);
 
+            ageMock.when(() -> AgeValidator.isNotFutureDate(registerRequest.getDateOfBirth()))
+                    .thenReturn(true);
+
             ageMock.when(() -> AgeValidator.isAdult(registerRequest.getDateOfBirth()))
                     .thenReturn(true);
 
@@ -145,6 +148,9 @@ class AuthServiceImplTest {
                     .thenReturn(false);
 
             passwordMock.when(() -> PasswordValidator.isStrong("Strong@123"))
+                    .thenReturn(true);
+
+            ageMock.when(() -> AgeValidator.isNotFutureDate(registerRequest.getDateOfBirth()))
                     .thenReturn(true);
 
             ageMock.when(() -> AgeValidator.isAdult(registerRequest.getDateOfBirth()))

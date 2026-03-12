@@ -20,6 +20,10 @@ import java.util.stream.Collectors;
 import com.example.demo.repository.FavoriteRepository;
 import com.example.demo.dto.analytics.SongFavoriteStatsDTO;
 
+import com.example.demo.repository.PlaylistSongRepository;
+import com.example.demo.repository.PlayHistoryRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,17 +37,23 @@ public class SongServiceImpl implements SongService {
     private final FileStorageService fileStorageService;
     private final AlbumRepository albumRepository;
     private final FavoriteRepository favoriteRepository;
+    private final PlaylistSongRepository playlistSongRepository;
+    private final PlayHistoryRepository playHistoryRepository;
 
     public SongServiceImpl(SongRepository songRepository,
             UserRepository userRepository,
             FileStorageService fileStorageService,
             AlbumRepository albumRepository,
-            FavoriteRepository favoriteRepository) {
+            FavoriteRepository favoriteRepository,
+            PlaylistSongRepository playlistSongRepository,
+            PlayHistoryRepository playHistoryRepository) {
          this.songRepository = songRepository;
          this.userRepository = userRepository;
          this.fileStorageService = fileStorageService;
          this.albumRepository = albumRepository;
          this.favoriteRepository = favoriteRepository;
+         this.playlistSongRepository = playlistSongRepository;
+         this.playHistoryRepository = playHistoryRepository;
 
          logger.info("SongServiceImpl initialized");
     }
@@ -295,6 +305,7 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
+    @Transactional
     public void deleteSong(Long songId) {
 
         logger.info("Deleting song songId={}", songId);
@@ -311,6 +322,11 @@ public class SongServiceImpl implements SongService {
             logger.warn("Unauthorized delete attempt songId={}", songId);
             throw new BadRequestException("Unauthorized access");
         }
+
+        // Delete related records first to avoid FK constraint violation
+        favoriteRepository.deleteBySong(song);
+        playlistSongRepository.deleteBySong(song);
+        playHistoryRepository.deleteBySong(song);
 
         fileStorageService.deleteFile(song.getAudioPath());
 

@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.PlayHistory;
 import com.example.demo.entity.User;
+import com.example.demo.entity.Song;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +16,8 @@ public interface PlayHistoryRepository extends JpaRepository<PlayHistory, Long> 
     List<PlayHistory> findByUserOrderByPlayedAtDesc(User user);
 
     void deleteByUser(User user);
+
+    void deleteBySong(Song song);
     
     @Query("""
            SELECT h.song.id, h.song.title, COUNT(h)

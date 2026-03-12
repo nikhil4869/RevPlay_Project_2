@@ -9,6 +9,8 @@ import com.example.demo.entity.User;
 
 import com.example.demo.repository.AlbumRepository;
 import com.example.demo.repository.FavoriteRepository;
+import com.example.demo.repository.PlaylistSongRepository;
+import com.example.demo.repository.PlayHistoryRepository;
 import com.example.demo.repository.SongRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FileStorageService;
@@ -43,6 +45,12 @@ class SongServiceImplTest {
 
     @Mock
     private FavoriteRepository favoriteRepository;
+
+    @Mock
+    private PlaylistSongRepository playlistSongRepository;
+
+    @Mock
+    private PlayHistoryRepository playHistoryRepository;
 
     @InjectMocks
     private SongServiceImpl songService;
@@ -171,6 +179,9 @@ class SongServiceImplTest {
 
             songService.deleteSong(10L);
 
+            verify(favoriteRepository).deleteBySong(mockSong);
+            verify(playlistSongRepository).deleteBySong(mockSong);
+            verify(playHistoryRepository).deleteBySong(mockSong);
             verify(fileStorageService).deleteFile("/audio/test.mp3");
             verify(fileStorageService).deleteFile("/cover/test.jpg");
             verify(songRepository).delete(mockSong);
