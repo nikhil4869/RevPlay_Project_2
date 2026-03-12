@@ -123,9 +123,14 @@
                                         <i class="fa-solid fa-ellipsis"></i>
                                     </button>
                                     <div class="options-dropdown">
-                                        <button class="dropdown-item" th:onclick="'addFavorite(' + ${song.id} + ')'">
+                                        <!-- Show Remove from Favorite if song is already favorited, otherwise show Add to Favorite -->
+                                        <button th:if="${song.favorite}" class="dropdown-item" th:onclick="'removeFavorite(' + ${song.id} + ')'">
+                                            <i class="fa-solid fa-heart-crack"></i> Remove from Favorite
+                                        </button>
+                                        <button th:unless="${song.favorite}" class="dropdown-item" th:onclick="'addFavorite(' + ${song.id} + ')'">
                                             <i class="fa-regular fa-heart"></i> Add to Favorite
                                         </button>
+                                        
                                         <button class="dropdown-item"
                                             th:onclick="'showPlaylistModal(' + ${song.id} + ')'">
                                             <i class="fa-solid fa-list-plus"></i> Add to Playlist

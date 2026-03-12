@@ -260,7 +260,22 @@ window.toggleOptions = function (btn, event) {
 
 window.addFavorite = function (songId) {
     fetch(`/api/proxy/favorites/${songId}`, { method: 'POST' })
-        .then(res => { if (res.ok) alert("Added to favorites!"); });
+        .then(res => {
+            if (res.ok) {
+                alert("Added to favorites!");
+                location.reload();
+            }
+        });
+};
+
+window.removeFavorite = function (songId) {
+    fetch(`/api/proxy/favorites/${songId}`, { method: 'DELETE' })
+        .then(res => {
+            if (res.ok) {
+                alert("Removed from favorites!");
+                location.reload();
+            }
+        });
 };
 
 window.showPlaylistModal = function (songId) {

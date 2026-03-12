@@ -10,6 +10,7 @@ public class SongDTO {
     private String coverUrl;
     private String artistName;
     private String albumName;
+    private boolean favorite;
 
     public SongDTO() {}
 
@@ -21,6 +22,7 @@ public class SongDTO {
     public String getCoverUrl() { return coverUrl; }
     public String getArtistName() { return artistName; }
     public String getAlbumName() { return albumName; }
+    public boolean isFavorite() { return favorite; }
 
     public void setId(Long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
@@ -30,4 +32,5 @@ public class SongDTO {
     public void setCoverUrl(String coverUrl) { this.coverUrl = coverUrl; }
     public void setArtistName(String artistName) { this.artistName = artistName; }
     public void setAlbumName(String albumName) { this.albumName = albumName; }
+    public void setFavorite(boolean favorite) { this.favorite = favorite; }
 }

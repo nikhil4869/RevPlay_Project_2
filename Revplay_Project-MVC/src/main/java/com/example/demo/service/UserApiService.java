@@ -81,7 +81,8 @@ public class UserApiService {
         ResponseEntity<com.example.demo.dto.music.SongDTO[]> response = restTemplate.exchange(
                 url, HttpMethod.GET, requestEntity, com.example.demo.dto.music.SongDTO[].class
         );
-        return response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        java.util.List<com.example.demo.dto.music.SongDTO> songs = response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        return markFavorites(songs, token);
     }
 
     public java.util.List<com.example.demo.dto.music.SongDTO> searchSongs(String keyword, String token) {
@@ -92,7 +93,8 @@ public class UserApiService {
         ResponseEntity<com.example.demo.dto.music.SongDTO[]> response = restTemplate.exchange(
                 url, HttpMethod.GET, requestEntity, com.example.demo.dto.music.SongDTO[].class
         );
-        return response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        java.util.List<com.example.demo.dto.music.SongDTO> songs = response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        return markFavorites(songs, token);
     }
 
     public java.util.List<com.example.demo.dto.music.SongDTO> getFavorites(String token) {
@@ -103,7 +105,9 @@ public class UserApiService {
         ResponseEntity<com.example.demo.dto.music.SongDTO[]> response = restTemplate.exchange(
                 url, HttpMethod.GET, requestEntity, com.example.demo.dto.music.SongDTO[].class
         );
-        return response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        java.util.List<com.example.demo.dto.music.SongDTO> songs = response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        songs.forEach(s -> s.setFavorite(true));
+        return songs;
     }
 
     public java.util.List<com.example.demo.dto.music.AlbumDTO> getAllAlbums(String token) {
@@ -154,7 +158,8 @@ public class UserApiService {
         ResponseEntity<com.example.demo.dto.music.SongDTO[]> response = restTemplate.exchange(
                 url, HttpMethod.GET, requestEntity, com.example.demo.dto.music.SongDTO[].class
         );
-        return response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        java.util.List<com.example.demo.dto.music.SongDTO> songs = response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        return markFavorites(songs, token);
     }
 
     public java.util.List<com.example.demo.dto.music.SongDTO> getSongsByYear(Integer year, String token) {
@@ -165,7 +170,8 @@ public class UserApiService {
         ResponseEntity<com.example.demo.dto.music.SongDTO[]> response = restTemplate.exchange(
                 url, HttpMethod.GET, requestEntity, com.example.demo.dto.music.SongDTO[].class
         );
-        return response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        java.util.List<com.example.demo.dto.music.SongDTO> songs = response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        return markFavorites(songs, token);
     }
 
     public java.util.List<com.example.demo.dto.music.SongDTO> getSongsByArtist(Long artistId, String token) {
@@ -176,7 +182,8 @@ public class UserApiService {
         ResponseEntity<com.example.demo.dto.music.SongDTO[]> response = restTemplate.exchange(
                 url, HttpMethod.GET, requestEntity, com.example.demo.dto.music.SongDTO[].class
         );
-        return response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        java.util.List<com.example.demo.dto.music.SongDTO> songs = response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        return markFavorites(songs, token);
     }
 
     public java.util.List<com.example.demo.dto.music.SongDTO> getSongsByAlbum(Long albumId, String token) {
@@ -187,7 +194,8 @@ public class UserApiService {
         ResponseEntity<com.example.demo.dto.music.SongDTO[]> response = restTemplate.exchange(
                 url, HttpMethod.GET, requestEntity, com.example.demo.dto.music.SongDTO[].class
         );
-        return response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        java.util.List<com.example.demo.dto.music.SongDTO> songs = response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        return markFavorites(songs, token);
     }
 
     public java.util.List<com.example.demo.dto.playlist.PlaylistDTO> getMyPlaylists(String token) {
@@ -209,7 +217,8 @@ public class UserApiService {
         ResponseEntity<com.example.demo.dto.music.SongDTO[]> response = restTemplate.exchange(
                 url, HttpMethod.GET, requestEntity, com.example.demo.dto.music.SongDTO[].class
         );
-        return response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        java.util.List<com.example.demo.dto.music.SongDTO> songs = response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        return markFavorites(songs, token);
     }
 
     public void addFavorite(Long songId, String token) {
@@ -263,7 +272,22 @@ public class UserApiService {
         ResponseEntity<com.example.demo.dto.music.SongDTO[]> response = restTemplate.exchange(
                 url, HttpMethod.GET, requestEntity, com.example.demo.dto.music.SongDTO[].class
         );
-        return response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        java.util.List<com.example.demo.dto.music.SongDTO> songs = response.getBody() != null ? java.util.Arrays.asList(response.getBody()) : new java.util.ArrayList<>();
+        return markFavorites(songs, token);
+    }
+
+    private java.util.List<com.example.demo.dto.music.SongDTO> markFavorites(java.util.List<com.example.demo.dto.music.SongDTO> songs, String token) {
+        if (songs == null || songs.isEmpty()) return songs;
+        try {
+            java.util.List<com.example.demo.dto.music.SongDTO> favorites = getFavorites(token);
+            java.util.Set<Long> favoriteIds = favorites.stream()
+                    .map(com.example.demo.dto.music.SongDTO::getId)
+                    .collect(java.util.stream.Collectors.toSet());
+            songs.forEach(s -> s.setFavorite(favoriteIds.contains(s.getId())));
+        } catch (Exception e) {
+            // Log error or ignore if favorites cannot be fetched
+        }
+        return songs;
     }
     public com.example.demo.dto.playlist.PlaylistDTO createPlaylist(String name, String description, boolean isPublic, String token) {
         String url = BASE_URL + "/playlists";

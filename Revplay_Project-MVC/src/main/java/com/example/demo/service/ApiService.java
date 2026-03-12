@@ -68,7 +68,7 @@ public class ApiService {
                 return responseBody.substring(start, end);
             }
         }
-        return "An error occurred: " + e.getStatusText();
+        return e.getStatusText();
     }
     
 

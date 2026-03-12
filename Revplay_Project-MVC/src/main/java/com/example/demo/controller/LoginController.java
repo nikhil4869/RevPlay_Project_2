@@ -60,22 +60,19 @@ public class LoginController {
             }
         } catch (Exception e) {
             String errorMessage = e.getMessage();
-            
-            // If the message is a technical string from RestTemplate
-            if (errorMessage != null && (errorMessage.contains("401") || errorMessage.contains("Unauthorized") || errorMessage.contains("[no body]"))) {
-                // If it contains "Email not registered", we keep it (it might be wrapped in technical text)
+            String displayError = "Invalid email or password";
+
+            if (errorMessage != null) {
                 if (errorMessage.contains("Email not registered")) {
-                    errorMessage = "Email not registered";
-                } else {
-                    errorMessage = "Invalid email or password";
+                    displayError = "No account found with that email ID";
+                } else if (errorMessage.contains("Invalid credentials")) {
+                    displayError = "Incorrect password";
+                } else if (errorMessage.contains("Account is deactivated")) {
+                    displayError = "Account is deactivated. Use forgot password to reactivate.";
                 }
             }
-            
-            if (errorMessage == null || errorMessage.isEmpty()) {
-                errorMessage = "Invalid email or password";
-            }
-            
-            model.addAttribute("error", errorMessage);
+
+            model.addAttribute("error", displayError);
             return "login";
         }
     }
